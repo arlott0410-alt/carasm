@@ -13,8 +13,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ASM Cars">
   <link rel="manifest" href="/manifest.webmanifest">
-  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="/icons/icon.svg">
+  <link rel="icon" href="/icons/logo.png" type="image/png">
+  <link rel="apple-touch-icon" href="/icons/logo.png">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ASM ອາມສັ່ງມາ | Used Cars Vientiane">
   <meta property="og:description" content="Quality used cars in Vientiane with transparent pricing and fast WhatsApp support.">
@@ -78,6 +78,16 @@
     }
     .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; }
     .logo { font-family: "Cormorant Garamond", serif; font-size: 28px; color: var(--gold); font-weight: 700; line-height: 1; }
+    .logo-wrap { display: flex; align-items: center; gap: 10px; }
+    .logo-img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid rgba(201,168,76,.28);
+      background: #0f0f0f;
+      padding: 3px;
+    }
     .logo-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
     .nav-links { display: flex; gap: 18px; font-size: 14px; color: var(--muted); }
     .nav-actions { display: flex; align-items: center; gap: 10px; }
@@ -540,7 +550,10 @@
   <nav class="top-nav">
     <div class="container nav-row">
       <div>
-        <div class="logo" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        <div class="logo-wrap">
+          <img class="logo-img" src="/icons/logo.png" alt="ASM logo">
+          <div class="logo" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        </div>
         <div class="logo-sub" data-dyn="tagline-lo">ລົດມືສອງຄຸນນະພາບ ວຽງຈັນ</div>
       </div>
       <div class="nav-links">
@@ -668,7 +681,10 @@
   <footer>
     <div class="container" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
       <div>
-        <div class="logo" style="font-size:24px;" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        <div class="logo-wrap">
+          <img class="logo-img" src="/icons/logo.png" alt="ASM logo">
+          <div class="logo" style="font-size:24px;" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        </div>
         <div class="muted" data-dyn="tagline-lo">ລົດມືສອງຄຸນນະພາບ</div>
         <div class="muted" data-dyn="phone-number">+856 95 043 892</div>
       </div>
@@ -683,7 +699,10 @@
   <div class="overlay" id="loginOverlay">
     <div class="login-wrap">
       <aside class="login-brand">
-        <div class="logo" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        <div class="logo-wrap">
+          <img class="logo-img" src="/icons/logo.png" alt="ASM logo">
+          <div class="logo" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        </div>
         <div class="logo-sub" data-dyn="tagline-lo">ລົດມືສອງຄຸນນະພາບ</div>
         <p class="serif" style="font-size:34px;font-style:italic;line-height:1.2;margin-top:28px;">"Drive trust. Drive value."</p>
         <p class="muted">4.9 rating · 200+ sold · Vientiane</p>

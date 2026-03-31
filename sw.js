@@ -3,7 +3,7 @@ const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
-  "/icons/icon.svg",
+  "/icons/logo.png",
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 ];
 

@@ -10,9 +10,9 @@
   "lang": "lo",
   "icons": [
     {
-      "src": "/icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "/icons/logo.png",
+      "sizes": "640x640",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
