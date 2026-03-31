@@ -60,6 +60,24 @@
       font-family: "DM Sans", "Noto Sans Lao", sans-serif;
       background: var(--bg);
       color: var(--text);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      font-synthesis: none;
+    }
+    html[lang="lo"] body,
+    [data-lo],
+    :lang(lo) {
+      font-family: "Noto Sans Lao", "DM Sans", sans-serif;
+      line-height: 1.6;
+      letter-spacing: 0;
+      word-break: normal;
+      overflow-wrap: anywhere;
+    }
+    html[lang="en"] body,
+    [data-en],
+    :lang(en) {
+      font-family: "DM Sans", "Noto Sans Lao", sans-serif;
+      line-height: 1.5;
     }
     [data-lang="lo"] [data-en] { display: none !important; }
     [data-lang="en"] [data-lo] { display: none !important; }
@@ -77,7 +95,13 @@
       backdrop-filter: blur(6px);
     }
     .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; }
-    .logo { font-family: "Cormorant Garamond", serif; font-size: 28px; color: var(--gold); font-weight: 700; line-height: 1; }
+    .logo {
+      font-family: "Noto Sans Lao", "Cormorant Garamond", "DM Sans", sans-serif;
+      font-size: 28px;
+      color: var(--gold);
+      font-weight: 700;
+      line-height: 1.1;
+    }
     .logo-wrap { display: flex; align-items: center; gap: 10px; }
     .logo-img {
       width: 42px;
@@ -1310,6 +1334,7 @@
     }
 
     function setLang(l) {
+      document.documentElement.lang = l === "en" ? "en" : "lo";
       document.documentElement.dataset.lang = l;
       document.getElementById("btnLo").classList.toggle("active", l === "lo");
       document.getElementById("btnEn").classList.toggle("active", l === "en");
