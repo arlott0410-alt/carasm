@@ -354,12 +354,49 @@
       padding: 16px;
     }
     .admin-head, .user-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-    .tabs { display: flex; gap: 8px; margin: 12px 0; }
+    .admin-head {
+      position: sticky;
+      top: -16px;
+      z-index: 5;
+      background: #0f0f0f;
+      padding: 10px 0 8px;
+      border-bottom: 1px solid rgba(201,168,76,.2);
+      margin-bottom: 8px;
+    }
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin: 12px 0;
+      padding: 8px;
+      border: 1px solid rgba(201,168,76,.2);
+      background: linear-gradient(180deg, #151515, #121212);
+      border-radius: 12px;
+    }
     .tab { border: 1px solid var(--border); background: #171717; color: var(--text); border-radius: 10px; padding: 8px 12px; cursor: pointer; }
     .tab.active { border-color: var(--gold); color: var(--gold); }
     .tab-pane { display: none; }
     .tab-pane.show { display: block; }
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .field {
+      background: #121212;
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 10px;
+      padding: 10px;
+    }
+    .field label {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 6px;
+      letter-spacing: .04em;
+    }
+    .section-title {
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin: 12px 0 8px;
+    }
     .upload-zone {
       border: 1px dashed var(--border);
       border-radius: 12px;
@@ -384,6 +421,7 @@
       height: 20px;
       cursor: pointer;
     }
+    .helper { color: var(--muted); font-size: 12px; margin-top: 6px; }
     .progress {
       width: 100%;
       height: 8px;
@@ -617,23 +655,31 @@
       </div>
 
       <div class="tab-pane show" id="tab-add">
+        <div class="section-title">Car Details</div>
         <div class="grid2">
-          <select id="carBrand">
+          <div class="field"><label>Brand</label><select id="carBrand">
             <option value="">Brand</option>
             <option>Toyota</option><option>Honda</option><option>Mitsubishi</option><option>Isuzu</option><option>Nissan</option><option>Ford</option><option>Other</option>
-          </select>
-          <input id="carModel" placeholder="Model">
-          <input id="carYear" type="number" placeholder="Year">
-          <input id="carMileage" type="number" placeholder="Mileage (km)">
-          <select id="carTransmission"><option>Auto</option><option>Manual</option><option>CVT</option><option>E-CVT</option></select>
-          <input id="carColor" placeholder="Color">
-          <input id="carPrice" type="number" placeholder="Price (LAK)">
-          <select id="carStatus"><option value="available">available</option><option value="reserved">reserved</option><option value="sold">sold</option></select>
-          <textarea id="carDescLo" placeholder="Description Lao"></textarea>
-          <textarea id="carDescEn" placeholder="Description English"></textarea>
+          </select></div>
+          <div class="field"><label>Model</label><input id="carModel" placeholder="Model"></div>
+          <div class="field"><label>Year</label><input id="carYear" type="number" placeholder="Year"></div>
+          <div class="field"><label>Mileage (km)</label><input id="carMileage" type="number" placeholder="Mileage (km)"></div>
+          <div class="field"><label>Transmission</label><select id="carTransmission"><option>Auto</option><option>Manual</option><option>CVT</option><option>E-CVT</option></select></div>
+          <div class="field"><label>Color</label><input id="carColor" placeholder="Color"></div>
+          <div class="field"><label>Price (LAK)</label><input id="carPrice" type="number" placeholder="Price (LAK)"></div>
+          <div class="field"><label>Status</label><select id="carStatus"><option value="available">available</option><option value="reserved">reserved</option><option value="sold">sold</option></select></div>
+          <div class="field"><label>Description Lao</label><textarea id="carDescLo" placeholder="Description Lao"></textarea></div>
+          <div class="field"><label>Description English</label><textarea id="carDescEn" placeholder="Description English"></textarea></div>
         </div>
+        <div class="section-title">Photos</div>
         <div class="upload-zone" id="uploadZone">Drag & drop images here or click to upload (max 10)</div>
+        <div class="helper">1 car can have multiple images. You can remove each image before saving.</div>
         <input id="imageInput" type="file" accept="image/*" multiple style="display:none;">
+        <div id="existingWrap" style="display:none;">
+          <div class="helper" style="margin-top:10px;">Existing photos</div>
+          <div class="thumbs" id="existingThumbs"></div>
+        </div>
+        <div class="helper" style="margin-top:10px;">New photos to upload</div>
         <div class="thumbs" id="thumbs"></div>
         <div class="progress" id="uploadProgress"><span id="uploadProgressBar"></span></div>
         <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">
@@ -690,6 +736,7 @@
       hours_en: "Mon-Sun 08:00-18:00"
     };
     let selectedFiles = [];
+    let existingPhotos = [];
     let editingId = null;
     let currentUser = null;
 
@@ -949,6 +996,7 @@
 
     function clearCarForm() {
       editingId = null;
+      existingPhotos = [];
       ["carBrand","carModel","carYear","carMileage","carTransmission","carColor","carPrice","carStatus","carDescLo","carDescEn"].forEach((id) => {
         const el = document.getElementById(id);
         if (!el) return;
@@ -957,6 +1005,7 @@
       });
       selectedFiles = [];
       renderThumbs();
+      renderExistingThumbs();
       setProgress(0, false);
     }
 
@@ -970,6 +1019,27 @@
     window.removeSelectedFile = function removeSelectedFile(i) {
       selectedFiles.splice(i, 1);
       renderThumbs();
+    };
+
+    function renderExistingThumbs() {
+      const wrap = document.getElementById("existingWrap");
+      const box = document.getElementById("existingThumbs");
+      if (!existingPhotos.length) {
+        wrap.style.display = "none";
+        box.innerHTML = "";
+        return;
+      }
+      wrap.style.display = "block";
+      box.innerHTML = existingPhotos.map((url, i) => `
+        <div class="thumb">
+          <img src="${esc(url)}" alt="">
+          <button type="button" onclick="removeExistingPhoto(${i})">×</button>
+        </div>
+      `).join("");
+    }
+    window.removeExistingPhoto = function removeExistingPhoto(i) {
+      existingPhotos.splice(i, 1);
+      renderExistingThumbs();
     };
 
     function setProgress(value, show = true) {
@@ -1012,9 +1082,10 @@
       }
       if (selectedFiles.length) {
         const urls = await uploadImages(carId);
-        const existing = cars.find((c) => c.id === carId)?.photos || [];
-        const merged = [...existing, ...urls].slice(0, 10);
+        const merged = [...existingPhotos, ...urls].slice(0, 10);
         await supa.from("cars").update({ photos: merged }).eq("id", carId);
+      } else if (editingId) {
+        await supa.from("cars").update({ photos: existingPhotos.slice(0, 10) }).eq("id", carId);
       }
       clearCarForm();
       await fetchCars();
@@ -1052,6 +1123,10 @@
       document.getElementById("carStatus").value = c.status || "available";
       document.getElementById("carDescLo").value = c.desc_lo || "";
       document.getElementById("carDescEn").value = c.desc_en || "";
+      existingPhotos = Array.isArray(c.photos) ? [...c.photos] : [];
+      renderExistingThumbs();
+      selectedFiles = [];
+      renderThumbs();
       document.querySelector("[data-tab='add']").click();
     }
     window.editCar = editCar;
@@ -1065,7 +1140,7 @@
             <img src="${esc(thumb)}" alt="">
             <div>
               <div>${esc(c.brand)} ${esc(c.model)} · ${esc(c.year)} · ${esc(c.mileage || 0)} km</div>
-              <div class="muted">${formatPrice(c.price)} · ${esc(c.status)}</div>
+              <div class="muted">${formatPrice(c.price)} · ${esc(c.status)} · ${Array.isArray(c.photos) ? c.photos.length : 0} photos</div>
             </div>
             <div style="display:flex;gap:6px;">
               <button class="btn btn-ghost" type="button" onclick="editCar(${c.id})">Edit</button>
@@ -1153,7 +1228,8 @@
 
     function addFiles(files) {
       const imgs = files.filter((f) => f.type.startsWith("image/"));
-      selectedFiles = [...selectedFiles, ...imgs].slice(0, 10);
+      const remainingSlots = Math.max(0, 10 - existingPhotos.length);
+      selectedFiles = [...selectedFiles, ...imgs].slice(0, remainingSlots);
       renderThumbs();
     }
 
