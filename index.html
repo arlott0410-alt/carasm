@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="lo" data-lang="lo">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASM ອາມສັ່ງມາ | ລົດມືສອງຄຸນນະພາບ ວຽງຈັນ ລາວ</title>
+  <meta name="description" content="ASM ອາມສັ່ງມາ ຮ້ານຂາຍລົດມືສອງຄຸນນະພາບໃນນະຄອນຫຼວງວຽງຈັນ. ລາຄາໂປ່ງໃສ, ຮັບປຶກສາຜ່ານ WhatsApp ໄວ.">
+  <meta name="keywords" content="ລົດມືສອງ ວຽງຈັນ, used car Laos, used car Vientiane, ASM ອາມສັ່ງມາ, second hand car Vientiane">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://asmcars.la/">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ASM ອາມສັ່ງມາ | Used Cars Vientiane">
+  <meta property="og:description" content="Quality used cars in Vientiane with transparent pricing and fast WhatsApp support.">
+  <meta property="og:image" content="https://asmcars.la/og-image.jpg">
+  <meta property="og:url" content="https://asmcars.la/">
+  <meta property="og:locale" content="lo_LA">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "AutoDealer",
+      "name": "ASM ອາມສັ່ງມາ",
+      "telephone": "+85695043892",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "ນະຄອນຫຼວງວຽງຈັນ",
+        "addressCountry": "LA"
+      },
+      "url": "https://asmcars.la",
+      "openingHours": "Mo-Su 08:00-18:00"
+    }
+  </script>
+  <script>/* window.__ENV injected server-side */</script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Sans+Lao:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --card: #161616;
+      --text: #F2EFE9;
+      --gold: #C9A84C;
+      --muted: #9A9490;
+      --green: #22C55E;
+      --amber: #F59E0B;
+      --red: #EF4444;
+      --wa: #25D366;
+      --border: rgba(255,255,255,.09);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "DM Sans", "Noto Sans Lao", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    [data-lang="lo"] [data-en] { display: none !important; }
+    [data-lang="en"] [data-lo] { display: none !important; }
+    a { color: inherit; text-decoration: none; }
+    .container { width: min(1200px, 92vw); margin: 0 auto; }
+    .serif { font-family: "Cormorant Garamond", serif; }
+    .muted { color: var(--muted); }
+    .top-nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 50;
+      background: rgba(8, 8, 8, .97);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(6px);
+    }
+    .nav-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 0; }
+    .logo { font-family: "Cormorant Garamond", serif; font-size: 28px; color: var(--gold); font-weight: 700; line-height: 1; }
+    .logo-sub { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    .nav-links { display: flex; gap: 18px; font-size: 14px; color: var(--muted); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .lang-btn {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 999px;
+      padding: 7px 12px;
+      cursor: pointer;
+    }
+    .lang-btn.active { border-color: var(--gold); color: var(--gold); }
+    .btn {
+      border: 0;
+      cursor: pointer;
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+    .btn-gold { background: var(--gold); color: #111; }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
+    .btn-wa { background: var(--wa); color: #062a12; }
+    .hero { padding-top: 98px; min-height: 100vh; display: grid; align-items: center; }
+    .hero-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 28px; }
+    .gold-line { height: 3px; width: 0; background: var(--gold); animation: lineGrow 1.1s ease forwards; margin-bottom: 16px; }
+    @keyframes lineGrow { to { width: 128px; } }
+    h1 { margin: 0; font-family: "Cormorant Garamond", serif; font-size: clamp(38px, 6vw, 74px); line-height: .95; letter-spacing: .3px; }
+    .hero-sub { margin-top: 14px; color: var(--muted); max-width: 560px; }
+    .hero-cta { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .hero-stats { margin-top: 24px; display: flex; gap: 22px; color: var(--muted); }
+    .hero-stats strong { display: block; color: var(--text); font-size: 20px; margin-bottom: 3px; }
+    .hero-panel {
+      background: linear-gradient(135deg, #1a1a1a, #111);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      min-height: 420px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 26px 26px;
+      opacity: .35;
+    }
+    .ring {
+      width: 170px;
+      height: 170px;
+      border: 2px solid var(--gold);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      display: grid;
+      place-items: center;
+      animation: spin 12s linear infinite;
+      font-size: 42px;
+      z-index: 2;
+    }
+    @keyframes spin { from { transform: translate(-50%, -50%) rotate(0); } to { transform: translate(-50%, -50%) rotate(360deg); } }
+    .float-badge {
+      position: absolute;
+      z-index: 2;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: rgba(10,10,10,.9);
+      padding: 10px 13px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dot { width: 9px; height: 9px; border-radius: 999px; }
+    .dot.green { background: var(--green); }
+    .dot.amber { background: var(--amber); }
+    .badge-a { top: 20px; right: 18px; }
+    .badge-b { left: 18px; bottom: 20px; }
+    .ticker {
+      background: var(--gold);
+      color: #1b1606;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-top: 30px;
+    }
+    .ticker-track {
+      display: inline-flex;
+      gap: 40px;
+      padding: 10px 0;
+      animation: ticker 22s linear infinite;
+      min-width: 200%;
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    .section { padding: 48px 0; }
+    .search-bar {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+    }
+    select, input, textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 11px 12px;
+      font: inherit;
+    }
+    textarea { resize: vertical; min-height: 90px; }
+    .cards { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 16px; margin-top: 20px; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+    }
+    .card.sold { opacity: .45; pointer-events: none; }
+    .photo-wrap {
+      position: relative;
+      aspect-ratio: 16/10;
+      overflow: hidden;
+      background: #101010;
+    }
+    .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .status-pill, .count-badge {
+      position: absolute;
+      top: 10px;
+      font-size: 12px;
+      border-radius: 999px;
+      padding: 5px 9px;
+      z-index: 3;
+      font-weight: 600;
+    }
+    .status-pill { left: 10px; color: #081009; }
+    .status-available { background: var(--green); }
+    .status-reserved { background: var(--amber); color: #271a03; }
+    .status-sold { background: var(--red); color: #260607; }
+    .count-badge { right: 10px; background: rgba(0,0,0,.62); color: #e9e9e9; border: 1px solid var(--border); }
+    .price-overlay {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      color: var(--gold);
+      font-family: "Cormorant Garamond", serif;
+      font-size: 28px;
+      text-shadow: 0 2px 10px rgba(0,0,0,.6);
+      z-index: 3;
+    }
+    .photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.65), rgba(0,0,0,.08));
+      z-index: 2;
+    }
+    .card-body { padding: 14px; }
+    .brand { color: var(--muted); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+    .model { margin: 5px 0 10px; font-family: "Cormorant Garamond", serif; font-size: 31px; line-height: .95; }
+    .specs { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 7px 12px; }
+    .desc { color: #c8c4c0; margin: 11px 0 13px; min-height: 40px; font-size: 14px; }
+    .gallery-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 4;
+      width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.55);
+      color: #fff;
+      display: none;
+    }
+    .photo-wrap:hover .gallery-nav { display: grid; place-items: center; }
+    .gallery-nav.left { left: 8px; }
+    .gallery-nav.right { right: 8px; }
+    .dots { position: absolute; bottom: 8px; right: 10px; z-index: 4; display: flex; gap: 4px; }
+    .dot-mini { width: 6px; height: 6px; border-radius: 999px; background: rgba(255,255,255,.35); border: 0; padding: 0; }
+    .dot-mini.active { background: var(--gold); }
+    .stats-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 8px;
+      padding: 18px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #121212;
+      margin-top: 16px;
+      text-align: center;
+    }
+    .steps { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px; }
+    .step { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+    .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    footer { border-top: 1px solid var(--border); margin-top: 24px; padding: 24px 0 36px; color: var(--muted); }
+    .fab {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 70;
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #141414;
+      color: var(--text);
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .fab:hover { background: var(--gold); color: #121212; }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.74);
+      display: none;
+      z-index: 80;
+    }
+    .overlay.show { display: grid; place-items: center; }
+    .login-wrap {
+      width: min(980px, 95vw);
+      min-height: 560px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #0d0d0d;
+    }
+    .login-brand { background: linear-gradient(135deg, #161616, #121212); padding: 30px; }
+    .login-form { background: #0a0a0a; padding: 30px; display: grid; align-content: center; gap: 12px; }
+    .eyebrow { color: var(--gold); text-transform: uppercase; letter-spacing: .16em; font-size: 12px; }
+    .login-title { font-family: "Cormorant Garamond", serif; font-size: 43px; margin: 4px 0 14px; }
+    .input-row { position: relative; }
+    .input-ico { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .input-row input { padding-left: 34px; }
+    .err { display: none; border: 1px solid #4a3112; background: #2d200f; color: #ffd89a; padding: 10px; border-radius: 10px; }
+    .err.show { display: flex; gap: 7px; align-items: center; }
+    .hint { color: var(--muted); font-size: 13px; }
+    .admin-modal {
+      width: min(860px, 95vw);
+      max-height: 90vh;
+      overflow: auto;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: #0f0f0f;
+      padding: 16px;
+    }
+    .admin-head, .user-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .tabs { display: flex; gap: 8px; margin: 12px 0; }
+    .tab { border: 1px solid var(--border); background: #171717; color: var(--text); border-radius: 10px; padding: 8px 12px; cursor: pointer; }
+    .tab.active { border-color: var(--gold); color: var(--gold); }
+    .tab-pane { display: none; }
+    .tab-pane.show { display: block; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .upload-zone {
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      text-align: center;
+      padding: 18px;
+      color: var(--muted);
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .thumbs { margin-top: 9px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .thumb { width: 76px; height: 58px; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; position: relative; }
+    .thumb img { width: 100%; height: 100%; object-fit: cover; }
+    .thumb button {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      border: 0;
+      background: rgba(0,0,0,.6);
+      color: #fff;
+      border-radius: 999px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: #1d1d1d;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 10px 0;
+      display: none;
+    }
+    .progress span { display: block; height: 100%; width: 0; background: var(--gold); }
+    .admin-list-item { display: grid; grid-template-columns: 66px 1fr auto auto; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); padding: 8px 0; }
+    .admin-list-item img { width: 66px; height: 50px; object-fit: cover; border-radius: 7px; border: 1px solid var(--border); }
+    .warn-banner {
+      display: none;
+      background: #2a2013;
+      border: 1px solid #5a3f16;
+      color: #ffdb9d;
+      padding: 9px 12px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .warn-banner.show { display: block; }
+    @media (max-width: 1080px) {
+      .cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-panel { display: none; }
+      .steps { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 800px) {
+      .login-wrap { grid-template-columns: 1fr; }
+      .login-brand { display: none; }
+      .search-bar { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .contact-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 650px) {
+      .nav-links { display: none; }
+      .cards { grid-template-columns: 1fr; }
+      .stats-strip { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .steps { grid-template-columns: 1fr; }
+      .grid2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="top-nav">
+    <div class="container nav-row">
+      <div>
+        <div class="logo" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        <div class="logo-sub" data-dyn="tagline-lo">ລົດມືສອງຄຸນນະພາບ ວຽງຈັນ</div>
+      </div>
+      <div class="nav-links">
+        <a href="#inventory">ລົດທີ່ມີ</a>
+        <a href="#about">ກ່ຽວກັບ</a>
+        <a href="#contact">ຕິດຕໍ່</a>
+      </div>
+      <div class="nav-actions">
+        <button class="lang-btn active" id="btnLo">ລາວ</button>
+        <button class="lang-btn" id="btnEn">EN</button>
+        <a class="btn btn-wa" data-dyn="wa-href" href="https://wa.me/85695043892" target="_blank" rel="noreferrer">WhatsApp</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <div class="gold-line"></div>
+          <h1>
+            ລົດດີ<br>
+            ຄຸນນະພາບ<br>
+            ລາຄາໂປ່ງໃສ
+          </h1>
+          <div class="hero-sub" data-dyn="tagline-en">
+            Trusted used cars in Vientiane with clear history and real support.
+          </div>
+          <div class="hero-cta">
+            <a href="#inventory" class="btn btn-gold"><span data-lo>ເບິ່ງລົດໃນສະຕັອກ</span><span data-en>Browse Inventory</span></a>
+            <a data-dyn="wa-href" href="https://wa.me/85695043892" target="_blank" rel="noreferrer" class="btn btn-wa">WhatsApp</a>
+          </div>
+          <div class="hero-stats">
+            <div><strong id="stockCount">0</strong><span data-lo>ລົດໃນສະຕັອກ</span><span data-en>Cars in stock</span></div>
+            <div><strong>4.9</strong><span data-lo>ຄະແນນຄວາມເຊື່ອໃຈ</span><span data-en>Customer rating</span></div>
+            <div><strong>200+</strong><span data-lo>ຂາຍແລ້ວ</span><span data-en>Cars sold</span></div>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="ring">🚗</div>
+          <div class="float-badge badge-a"><span class="dot green"></span><span data-lo>ພ້ອມນັດເບິ່ງລົດມື້ນີ້</span><span data-en>View today available</span></div>
+          <div class="float-badge badge-b"><span class="dot amber"></span><span data-lo>ຕອບ WA ໄວກວ່າ 1 ຊົ່ວໂມງ</span><span data-en>WA reply in under 1 hour</span></div>
+        </div>
+      </div>
+      <div class="ticker">
+        <div class="ticker-track">
+          <span>ASM ອາມສັ່ງມາ</span><span>Toyota</span><span>Honda</span><span>Mitsubishi</span><span>Isuzu</span><span>Vientiane</span><span data-dyn="phone-number">+856 95 043 892</span>
+          <span>ASM ອາມສັ່ງມາ</span><span>Toyota</span><span>Honda</span><span>Mitsubishi</span><span>Isuzu</span><span>Used Cars Laos</span><span data-dyn="phone-number">+856 95 043 892</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="inventory" class="section">
+      <div class="container">
+        <div class="warn-banner" id="cfgWarn">
+          Supabase config is missing. Running in demo mode. Set environment variables in Cloudflare Pages.
+        </div>
+        <div class="search-bar">
+          <select id="filterBrand"><option value="">Brand</option></select>
+          <select id="filterStatus">
+            <option value="">Status</option>
+            <option value="available">Available</option>
+            <option value="reserved">Reserved</option>
+            <option value="sold">Sold</option>
+          </select>
+          <select id="filterPrice">
+            <option value="">Price</option>
+            <option value="0-100000000">0 - 100M LAK</option>
+            <option value="100000000-250000000">100M - 250M LAK</option>
+            <option value="250000000-500000000">250M - 500M LAK</option>
+            <option value="500000000-10000000000">500M+ LAK</option>
+          </select>
+          <select id="filterYear">
+            <option value="">Year</option>
+          </select>
+          <button class="btn btn-gold" id="btnSearch">Search</button>
+        </div>
+        <div class="cards" id="carGrid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container stats-strip">
+        <div><strong>100%</strong><div class="muted" data-lo>ຂໍ້ມູນຈິງ</div><div class="muted" data-en>Real data only</div></div>
+        <div><strong id="statsCarCount">0</strong><div class="muted" data-lo>ລົດທີ່ມີ</div><div class="muted" data-en>Cars in stock</div></div>
+        <div><strong>&lt;1h</strong><div class="muted" data-lo>ຕອບ WA</div><div class="muted" data-en>WA response</div></div>
+        <div><strong>200+</strong><div class="muted" data-lo>ຂາຍແລ້ວ</div><div class="muted" data-en>Sold already</div></div>
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="container">
+        <h2 class="serif" style="font-size:42px;margin-top:0;"><span data-lo>ຂັ້ນຕອນການຊື້</span><span data-en>How It Works</span></h2>
+        <div class="steps">
+          <div class="step">🔍 <span data-lo>ເລືອກລົດ</span><span data-en>Choose</span></div>
+          <div class="step">💬 <span data-lo>ທັກ WA</span><span data-en>Chat WA</span></div>
+          <div class="step">🚗 <span data-lo>ນັດເບິ່ງລົດ</span><span data-en>View Car</span></div>
+          <div class="step">🤝 <span data-lo>ຕໍ່ລອງລາຄາ</span><span data-en>Negotiate</span></div>
+          <div class="step">✅ <span data-lo>ຮັບລົດ</span><span data-en>Drive Away</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section">
+      <div class="container contact-grid">
+        <div class="panel">
+          <h3 class="serif" style="font-size:34px;margin:0 0 8px;" data-dyn="shop-name">ASM ອາມສັ່ງມາ</h3>
+          <p class="muted" data-dyn="tagline-en">Reliable used cars with transparent prices in Vientiane.</p>
+          <p><strong>WhatsApp:</strong> <a data-dyn="wa-href" href="https://wa.me/85695043892" target="_blank" rel="noreferrer" data-dyn-text="wa-number">+856 95 043 892</a></p>
+          <p><strong>Phone:</strong> <a data-dyn="phone-href" href="tel:+85695043892" data-dyn-text="phone-number">+856 95 043 892</a></p>
+          <p class="muted" data-dyn="location-lo">ນະຄອນຫຼວງວຽງຈັນ, ລາວ</p>
+        </div>
+        <form class="panel" id="waForm">
+          <h3 class="serif" style="font-size:30px;margin:0 0 10px;"><span data-lo>ສົ່ງຂໍ້ຄວາມຜ່ານ WA</span><span data-en>Send WhatsApp Message</span></h3>
+          <input id="waName" placeholder="Name / ຊື່">
+          <input id="waPhone" placeholder="Phone / ເບີ">
+          <select id="waCarSelect"><option value="">Car of interest / ລົດທີ່ສົນໃຈ</option></select>
+          <textarea id="waMsg" placeholder="Message / ຂໍ້ຄວາມ"></textarea>
+          <button type="submit" class="btn btn-wa">Open WhatsApp</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <div>
+        <div class="logo" style="font-size:24px;" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        <div class="muted" data-dyn="tagline-lo">ລົດມືສອງຄຸນນະພາບ</div>
+        <div class="muted" data-dyn="phone-number">+856 95 043 892</div>
+      </div>
+      <div class="muted">Toyota · Honda · Mitsubishi · Isuzu · Nissan · Ford</div>
+      <div class="muted" data-dyn="copyright">© 2026 ASM ອາມສັ່ງມາ · ນະຄອນຫຼວງວຽງຈັນ</div>
+    </div>
+  </footer>
+
+  <button class="fab" id="adminFab" title="Admin">⚙</button>
+
+  <div class="overlay" id="loginOverlay">
+    <div class="login-wrap">
+      <aside class="login-brand">
+        <div class="logo" data-dyn="shop-name">ASM ອາມສັ່ງມາ</div>
+        <div class="logo-sub" data-dyn="tagline-lo">ລົດມືສອງຄຸນນະພາບ</div>
+        <p class="serif" style="font-size:34px;font-style:italic;line-height:1.2;margin-top:28px;">"Drive trust. Drive value."</p>
+        <p class="muted">4.9 rating · 200+ sold · Vientiane</p>
+      </aside>
+      <section class="login-form">
+        <div class="eyebrow">Admin Access</div>
+        <div class="login-title">ເຂົ້າສູ່ລະບົບ</div>
+        <div class="input-row">
+          <span class="input-ico">✉</span>
+          <input id="loginEmail" type="email" placeholder="Email">
+        </div>
+        <div class="input-row">
+          <span class="input-ico">🔒</span>
+          <input id="loginPassword" type="password" placeholder="Password">
+        </div>
+        <div id="loginErr" class="err"><span>⚠</span><span id="loginErrText"></span></div>
+        <button class="btn btn-gold" id="btnLogin">Login →</button>
+        <div class="hint">Secured by Supabase Auth</div>
+      </section>
+    </div>
+  </div>
+
+  <div class="overlay" id="adminOverlay">
+    <div class="admin-modal">
+      <div class="admin-head">
+        <h3 class="serif" style="font-size:34px;margin:0;">Admin Panel</h3>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="border:1px solid var(--border);border-radius:999px;padding:6px 10px;" data-dyn="shop-name">ASM ອາມສັ່ງມາ</span>
+          <button class="btn btn-ghost" id="btnCloseAdmin">Close</button>
+        </div>
+      </div>
+      <div class="user-bar panel" style="padding:10px;margin-top:10px;">
+        <div id="userBarText">A · admin@example.com · Administrator · Online</div>
+        <button class="btn btn-ghost" id="btnLogout">Logout</button>
+      </div>
+      <div class="tabs">
+        <button class="tab active" data-tab="add">+ ເພີ່ມລົດ</button>
+        <button class="tab" data-tab="list">📋 ລາຍການ</button>
+        <button class="tab" data-tab="settings">⚙ ຕັ້ງຄ່າຮ້ານ</button>
+      </div>
+
+      <div class="tab-pane show" id="tab-add">
+        <div class="grid2">
+          <select id="carBrand">
+            <option value="">Brand</option>
+            <option>Toyota</option><option>Honda</option><option>Mitsubishi</option><option>Isuzu</option><option>Nissan</option><option>Ford</option><option>Other</option>
+          </select>
+          <input id="carModel" placeholder="Model">
+          <input id="carYear" type="number" placeholder="Year">
+          <input id="carMileage" type="number" placeholder="Mileage (km)">
+          <select id="carTransmission"><option>Auto</option><option>Manual</option><option>CVT</option><option>E-CVT</option></select>
+          <input id="carColor" placeholder="Color">
+          <input id="carPrice" type="number" placeholder="Price (LAK)">
+          <select id="carStatus"><option value="available">available</option><option value="reserved">reserved</option><option value="sold">sold</option></select>
+          <textarea id="carDescLo" placeholder="Description Lao"></textarea>
+          <textarea id="carDescEn" placeholder="Description English"></textarea>
+        </div>
+        <div class="upload-zone" id="uploadZone">Drag & drop images here or click to upload (max 10)</div>
+        <input id="imageInput" type="file" accept="image/*" multiple style="display:none;">
+        <div class="thumbs" id="thumbs"></div>
+        <div class="progress" id="uploadProgress"><span id="uploadProgressBar"></span></div>
+        <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:10px;">
+          <button class="btn btn-ghost" id="btnClearCar">Clear</button>
+          <button class="btn btn-gold" id="btnSaveCar">Save + Publish</button>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="tab-list">
+        <div id="adminList"></div>
+      </div>
+
+      <div class="tab-pane" id="tab-settings">
+        <div class="grid2">
+          <input id="s_shop_name" placeholder="shop_name">
+          <input id="s_tagline_lo" placeholder="tagline_lo">
+          <input id="s_tagline_en" placeholder="tagline_en">
+          <input id="s_wa_number" placeholder="wa_number">
+          <input id="s_phone" placeholder="phone">
+          <input id="s_location_lo" placeholder="location_lo">
+          <input id="s_location_en" placeholder="location_en">
+          <input id="s_facebook_url" placeholder="facebook_url">
+          <input id="s_hours_lo" placeholder="hours_lo">
+          <input id="s_hours_en" placeholder="hours_en">
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-top:10px;">
+          <button class="btn btn-gold" id="btnSaveSettings">Save Settings</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const ENV = window.__ENV || {};
+    const SUPABASE_URL = ENV.SUPABASE_URL || "";
+    const SUPABASE_KEY = ENV.SUPABASE_KEY || "";
+    const hasSupabaseConfig = Boolean(SUPABASE_URL && SUPABASE_KEY);
+    const supa = hasSupabaseConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+    }) : null;
+
+    let cars = [];
+    let filteredCars = [];
+    let shopSettings = {
+      shop_name: "ASM ອາມສັ່ງມາ",
+      tagline_lo: "ລົດມືສອງຄຸນນະພາບ ວຽງຈັນ",
+      tagline_en: "Quality used cars in Vientiane with transparent prices.",
+      wa_number: "85695043892",
+      phone: "+856 95 043 892",
+      location_lo: "ນະຄອນຫຼວງວຽງຈັນ, ລາວ",
+      location_en: "Vientiane Capital, Laos",
+      facebook_url: "",
+      hours_lo: "ຈັນ-ອາທິດ 08:00-18:00",
+      hours_en: "Mon-Sun 08:00-18:00"
+    };
+    let selectedFiles = [];
+    let editingId = null;
+    let currentUser = null;
+
+    const statusText = {
+      lo: { available: "ພ້ອມຂາຍ", reserved: "ຈອງແລ້ວ", sold: "ຂາຍແລ້ວ" },
+      en: { available: "Available", reserved: "Reserved", sold: "Sold" }
+    };
+
+    function formatPrice(v) {
+      return Number(v || 0).toLocaleString("en-US") + " LAK";
+    }
+
+    function statusClass(status) {
+      if (status === "reserved") return "status-reserved";
+      if (status === "sold") return "status-sold";
+      return "status-available";
+    }
+
+    function esc(str) {
+      return String(str || "").replace(/[&<>"']/g, (s) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[s]));
+    }
+
+    function buildCard(car, lang) {
+      const photos = Array.isArray(car.photos) && car.photos.length ? car.photos : ["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=60"];
+      const desc = lang === "lo" ? (car.desc_lo || car.desc_en || "") : (car.desc_en || car.desc_lo || "");
+      const status = car.status || "available";
+      return `
+        <article class="card ${status === "sold" ? "sold" : ""}" data-id="${car.id}">
+          <div class="photo-wrap">
+            <img src="${esc(photos[0])}" alt="${esc(car.brand)} ${esc(car.model)}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0">
+            <div class="photo-overlay"></div>
+            <div class="status-pill ${statusClass(status)}">${statusText[lang][status] || status}</div>
+            <div class="count-badge">${photos.length} photos</div>
+            <button class="gallery-nav left" onclick="slideGal(this,-1)" type="button">‹</button>
+            <button class="gallery-nav right" onclick="slideGal(this,1)" type="button">›</button>
+            <div class="dots">${photos.map((_, i) => `<button class="dot-mini ${i===0?"active":""}" data-dot="${i}" onclick="slideGal(this,0)" type="button"></button>`).join("")}</div>
+            <div class="price-overlay">${formatPrice(car.price)}</div>
+          </div>
+          <div class="card-body">
+            <div class="brand">${esc(car.brand)}</div>
+            <div class="model">${esc(car.model)}</div>
+            <div class="specs">
+              <span>${esc(car.year)}</span>
+              <span>${esc(car.transmission || "Auto")}</span>
+              <span>${esc(car.mileage || 0)} km</span>
+              <span>${esc(car.color || "-")}</span>
+            </div>
+            <div class="desc">${esc(desc).slice(0, 72)}${desc.length > 72 ? "..." : ""}</div>
+            <a class="btn btn-wa" style="display:block;text-align:center;" href="${buildWaHref(car)}" target="_blank" rel="noreferrer">WhatsApp</a>
+          </div>
+        </article>
+      `;
+    }
+
+    function buildWaHref(car) {
+      const num = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
+      const text = encodeURIComponent(`ສະບາຍດີ, ສົນໃຈລົດ ${car.brand} ${car.model} ${car.year} (${formatPrice(car.price)})`);
+      return `https://wa.me/${num}?text=${text}`;
+    }
+
+    function renderCars(list) {
+      const grid = document.getElementById("carGrid");
+      if (!list.length) {
+        grid.innerHTML = `<div class="panel" style="grid-column:1/-1;"><span data-lo>ບໍ່ພົບລົດທີ່ຕົງເງື່ອນໄຂ</span><span data-en>No cars matched your filter.</span></div>`;
+        return;
+      }
+      const lang = document.documentElement.dataset.lang || "lo";
+      grid.innerHTML = list.map((c) => buildCard(c, lang)).join("");
+    }
+
+    function slideGal(btnEl, dir) {
+      const wrap = btnEl.closest(".photo-wrap");
+      const img = wrap.querySelector("img[data-gallery]");
+      const photos = JSON.parse(img.dataset.gallery || "[]");
+      if (!photos.length) return;
+      let idx = Number(img.dataset.idx || "0");
+      if (dir === 0 && btnEl.dataset.dot) idx = Number(btnEl.dataset.dot);
+      else idx = (idx + dir + photos.length) % photos.length;
+      img.src = photos[idx];
+      img.dataset.idx = String(idx);
+      wrap.querySelectorAll(".dot-mini").forEach((d, i) => d.classList.toggle("active", i === idx));
+    }
+    window.slideGal = slideGal;
+
+    function applyFilter() {
+      const brand = document.getElementById("filterBrand").value;
+      const status = document.getElementById("filterStatus").value;
+      const price = document.getElementById("filterPrice").value;
+      const year = document.getElementById("filterYear").value;
+      filteredCars = cars.filter((c) => {
+        if (brand && c.brand !== brand) return false;
+        if (status && c.status !== status) return false;
+        if (year && String(c.year) !== year) return false;
+        if (price) {
+          const parts = price.split("-");
+          const low = Number(parts[0] || 0);
+          const high = Number(parts[1] || Number.MAX_SAFE_INTEGER);
+          if (Number(c.price) < low || Number(c.price) > high) return false;
+        }
+        return true;
+      });
+      renderCars(filteredCars);
+      updateStats();
+    }
+
+    function updateStats() {
+      const available = filteredCars.filter((c) => c.status !== "sold").length;
+      document.getElementById("stockCount").textContent = String(available);
+      document.getElementById("statsCarCount").textContent = String(available);
+    }
+
+    function populateCarSelect() {
+      const el = document.getElementById("waCarSelect");
+      el.innerHTML = '<option value="">Car of interest / ລົດທີ່ສົນໃຈ</option>' + cars.map((c) => `<option value="${c.id}">${esc(c.brand)} ${esc(c.model)} ${esc(c.year)}</option>`).join("");
+    }
+
+    function populateBrandFilter() {
+      const brands = [...new Set(cars.map((c) => c.brand).filter(Boolean))].sort();
+      document.getElementById("filterBrand").innerHTML = '<option value="">Brand</option>' + brands.map((b) => `<option value="${esc(b)}">${esc(b)}</option>`).join("");
+      const years = [...new Set(cars.map((c) => c.year).filter(Boolean))].sort((a,b) => b-a);
+      document.getElementById("filterYear").innerHTML = '<option value="">Year</option>' + years.map((y) => `<option value="${y}">${y}</option>`).join("");
+    }
+
+    async function fetchCars() {
+      if (!supa) return renderDemoCards();
+      const { data, error } = await supa.from("cars").select("*").order("created_at", { ascending: false });
+      if (error) return renderDemoCards();
+      cars = data || [];
+      filteredCars = [...cars];
+      renderCars(filteredCars);
+      updateStats();
+      populateCarSelect();
+      populateBrandFilter();
+      loadAdminList();
+    }
+
+    function renderDemoCards() {
+      document.getElementById("cfgWarn").classList.add("show");
+      cars = [
+        { id: 1001, brand: "Toyota", model: "Hilux Revo", year: 2019, mileage: 74000, transmission: "Auto", color: "White", price: 389000000, status: "available", desc_lo: "ເຄື່ອງດີ ພ້ອມໃຊ້ງານ", desc_en: "Reliable pickup, clean interior", photos: [] },
+        { id: 1002, brand: "Honda", model: "CR-V", year: 2018, mileage: 82000, transmission: "CVT", color: "Black", price: 335000000, status: "reserved", desc_lo: "ລົດຄອບຄົວຍອດນິຍົມ", desc_en: "Family SUV with full options", photos: [] },
+        { id: 1003, brand: "Mitsubishi", model: "Pajero Sport", year: 2017, mileage: 99000, transmission: "Auto", color: "Gray", price: 318000000, status: "sold", desc_lo: "ປະຫວັດການເຂົ້າສູນຄົບ", desc_en: "Service history available", photos: [] }
+      ];
+      filteredCars = [...cars];
+      renderCars(filteredCars);
+      updateStats();
+      populateCarSelect();
+      populateBrandFilter();
+      loadAdminList();
+    }
+
+    async function fetchSettings() {
+      if (!supa) return applySettingsToPage();
+      const { data, error } = await supa.from("settings").select("key,value");
+      if (!error && Array.isArray(data)) {
+        data.forEach((row) => { if (row && row.key) shopSettings[row.key] = row.value; });
+      }
+      applySettingsToPage();
+    }
+
+    function applySettingsToPage() {
+      document.querySelectorAll("[data-dyn]").forEach((el) => {
+        const key = el.getAttribute("data-dyn");
+        if (key === "wa-href") {
+          const wa = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
+          el.setAttribute("href", `https://wa.me/${wa}`);
+        } else if (key === "phone-href") {
+          el.setAttribute("href", `tel:${shopSettings.phone || ""}`);
+        } else if (key === "copyright") {
+          const year = new Date().getFullYear();
+          el.textContent = `© ${year} ${shopSettings.shop_name} · ${shopSettings.location_lo}`;
+        } else if (shopSettings[key] !== undefined) {
+          el.textContent = shopSettings[key];
+        }
+      });
+      document.querySelectorAll("[data-dyn-text='wa-number']").forEach((el) => el.textContent = shopSettings.phone || "");
+      document.querySelectorAll("[data-dyn-text='phone-number']").forEach((el) => el.textContent = shopSettings.phone || "");
+      loadSettingsForm();
+    }
+
+    async function saveSettings() {
+      if (!supa) return;
+      const keys = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en"];
+      const payload = keys.map((k) => ({ key: k, value: shopSettings[k] || "" }));
+      const { error } = await supa.from("settings").upsert(payload, { onConflict: "key" });
+      if (error) alert(error.message);
+    }
+
+    function loadSettingsForm() {
+      const ids = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en"];
+      ids.forEach((k) => {
+        const el = document.getElementById(`s_${k}`);
+        if (el) el.value = shopSettings[k] || "";
+      });
+    }
+
+    function readSettingsForm() {
+      const ids = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en"];
+      ids.forEach((k) => {
+        const el = document.getElementById(`s_${k}`);
+        if (el) shopSettings[k] = el.value.trim();
+      });
+    }
+
+    function showLoginErr(msg) {
+      const box = document.getElementById("loginErr");
+      document.getElementById("loginErrText").textContent = msg;
+      box.classList.add("show");
+    }
+
+    async function checkSession() {
+      if (!supa) return null;
+      const { data } = await supa.auth.getSession();
+      currentUser = data.session?.user || null;
+      return currentUser;
+    }
+
+    function showUserBar() {
+      if (!currentUser) return;
+      const email = currentUser.email || "unknown";
+      const initial = email.charAt(0).toUpperCase();
+      document.getElementById("userBarText").textContent = `${initial} · ${email} · Administrator · Online`;
+    }
+
+    async function doLogin() {
+      if (!supa) return showLoginErr("Supabase config missing.");
+      const email = document.getElementById("loginEmail").value.trim();
+      const password = document.getElementById("loginPassword").value;
+      const { data, error } = await supa.auth.signInWithPassword({ email, password });
+      if (error) return showLoginErr(error.message);
+      currentUser = data.user;
+      document.getElementById("loginOverlay").classList.remove("show");
+      openAdmin();
+    }
+
+    async function doLogout() {
+      if (!supa) return;
+      await supa.auth.signOut();
+      currentUser = null;
+      document.getElementById("adminOverlay").classList.remove("show");
+    }
+
+    function readCarForm() {
+      return {
+        brand: document.getElementById("carBrand").value.trim(),
+        model: document.getElementById("carModel").value.trim(),
+        year: Number(document.getElementById("carYear").value || 0),
+        mileage: Number(document.getElementById("carMileage").value || 0),
+        transmission: document.getElementById("carTransmission").value,
+        color: document.getElementById("carColor").value.trim(),
+        price: Number(document.getElementById("carPrice").value || 0),
+        status: document.getElementById("carStatus").value,
+        desc_lo: document.getElementById("carDescLo").value.trim(),
+        desc_en: document.getElementById("carDescEn").value.trim()
+      };
+    }
+
+    function clearCarForm() {
+      editingId = null;
+      ["carBrand","carModel","carYear","carMileage","carTransmission","carColor","carPrice","carStatus","carDescLo","carDescEn"].forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        if (el.tagName === "SELECT") el.selectedIndex = 0;
+        else el.value = "";
+      });
+      selectedFiles = [];
+      renderThumbs();
+      setProgress(0, false);
+    }
+
+    function renderThumbs() {
+      const box = document.getElementById("thumbs");
+      box.innerHTML = selectedFiles.map((f, i) => {
+        const src = URL.createObjectURL(f);
+        return `<div class="thumb"><img src="${src}" alt=""><button type="button" onclick="removeSelectedFile(${i})">×</button></div>`;
+      }).join("");
+    }
+    window.removeSelectedFile = function removeSelectedFile(i) {
+      selectedFiles.splice(i, 1);
+      renderThumbs();
+    };
+
+    function setProgress(value, show = true) {
+      const wrap = document.getElementById("uploadProgress");
+      const bar = document.getElementById("uploadProgressBar");
+      wrap.style.display = show ? "block" : "none";
+      bar.style.width = `${Math.max(0, Math.min(100, value))}%`;
+    }
+
+    async function uploadImages(carId) {
+      if (!supa || !selectedFiles.length) return [];
+      const total = selectedFiles.length;
+      const urls = [];
+      for (let i = 0; i < total; i += 1) {
+        const file = selectedFiles[i];
+        const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+        const path = `${carId}/${Date.now()}_${i}.${ext}`;
+        const { error: upErr } = await supa.storage.from("car-images").upload(path, file, { upsert: false, contentType: file.type || "image/jpeg" });
+        if (!upErr) {
+          const { data } = supa.storage.from("car-images").getPublicUrl(path);
+          urls.push(data.publicUrl);
+        }
+        setProgress(((i + 1) / total) * 100, true);
+      }
+      return urls;
+    }
+
+    async function saveCar() {
+      if (!supa) return alert("Supabase not configured.");
+      const payload = readCarForm();
+      if (!payload.brand || !payload.model || !payload.year || !payload.price) return alert("Please fill required fields.");
+      let carId = editingId;
+      if (!editingId) {
+        const { data, error } = await supa.from("cars").insert(payload).select("id").single();
+        if (error) return alert(error.message);
+        carId = data.id;
+      } else {
+        const { error } = await supa.from("cars").update(payload).eq("id", editingId);
+        if (error) return alert(error.message);
+      }
+      if (selectedFiles.length) {
+        const urls = await uploadImages(carId);
+        const existing = cars.find((c) => c.id === carId)?.photos || [];
+        const merged = [...existing, ...urls].slice(0, 10);
+        await supa.from("cars").update({ photos: merged }).eq("id", carId);
+      }
+      clearCarForm();
+      await fetchCars();
+      setProgress(0, false);
+    }
+
+    async function deleteCar(id) {
+      if (!supa) return;
+      if (!confirm("Delete this car?")) return;
+      const { error } = await supa.from("cars").delete().eq("id", id);
+      if (error) return alert(error.message);
+      fetchCars();
+    }
+    window.deleteCar = deleteCar;
+
+    async function updateStatus(id, s) {
+      if (!supa) return;
+      const { error } = await supa.from("cars").update({ status: s }).eq("id", id);
+      if (error) return alert(error.message);
+      fetchCars();
+    }
+    window.updateStatus = updateStatus;
+
+    function editCar(id) {
+      const c = cars.find((x) => x.id === id);
+      if (!c) return;
+      editingId = id;
+      document.getElementById("carBrand").value = c.brand || "";
+      document.getElementById("carModel").value = c.model || "";
+      document.getElementById("carYear").value = c.year || "";
+      document.getElementById("carMileage").value = c.mileage || "";
+      document.getElementById("carTransmission").value = c.transmission || "Auto";
+      document.getElementById("carColor").value = c.color || "";
+      document.getElementById("carPrice").value = c.price || "";
+      document.getElementById("carStatus").value = c.status || "available";
+      document.getElementById("carDescLo").value = c.desc_lo || "";
+      document.getElementById("carDescEn").value = c.desc_en || "";
+      document.querySelector("[data-tab='add']").click();
+    }
+    window.editCar = editCar;
+
+    function loadAdminList() {
+      const root = document.getElementById("adminList");
+      root.innerHTML = cars.map((c) => {
+        const thumb = c.photos && c.photos[0] ? c.photos[0] : "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=60";
+        return `
+          <div class="admin-list-item">
+            <img src="${esc(thumb)}" alt="">
+            <div>
+              <div>${esc(c.brand)} ${esc(c.model)} · ${esc(c.year)} · ${esc(c.mileage || 0)} km</div>
+              <div class="muted">${formatPrice(c.price)} · ${esc(c.status)}</div>
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost" type="button" onclick="editCar(${c.id})">Edit</button>
+              <button class="btn btn-ghost" type="button" onclick="updateStatus(${c.id},'sold')">Sold</button>
+              <button class="btn btn-ghost" type="button" onclick="updateStatus(${c.id},'available')">Restore</button>
+            </div>
+            <button class="btn btn-ghost" type="button" onclick="deleteCar(${c.id})">Delete</button>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function setLang(l) {
+      document.documentElement.dataset.lang = l;
+      document.getElementById("btnLo").classList.toggle("active", l === "lo");
+      document.getElementById("btnEn").classList.toggle("active", l === "en");
+      renderCars(filteredCars);
+    }
+    window.setLang = setLang;
+
+    async function openAdminFlow() {
+      if (!hasSupabaseConfig) return alert("Supabase not configured yet.");
+      await checkSession();
+      if (!currentUser) document.getElementById("loginOverlay").classList.add("show");
+      else openAdmin();
+    }
+
+    function openAdmin() {
+      showUserBar();
+      document.getElementById("adminOverlay").classList.add("show");
+    }
+
+    function bindEvents() {
+      document.getElementById("btnLo").addEventListener("click", () => setLang("lo"));
+      document.getElementById("btnEn").addEventListener("click", () => setLang("en"));
+      document.getElementById("btnSearch").addEventListener("click", applyFilter);
+      ["filterBrand","filterStatus","filterPrice","filterYear"].forEach((id) => {
+        document.getElementById(id).addEventListener("change", applyFilter);
+      });
+      document.getElementById("waForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("waName").value.trim();
+        const phone = document.getElementById("waPhone").value.trim();
+        const carId = Number(document.getElementById("waCarSelect").value || 0);
+        const car = cars.find((x) => x.id === carId);
+        const msg = document.getElementById("waMsg").value.trim();
+        const target = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
+        const text = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nCar: ${car ? `${car.brand} ${car.model}` : "-"}\nMessage: ${msg}`);
+        window.open(`https://wa.me/${target}?text=${text}`, "_blank", "noopener,noreferrer");
+      });
+      document.getElementById("adminFab").addEventListener("click", openAdminFlow);
+      document.getElementById("btnLogin").addEventListener("click", doLogin);
+      document.getElementById("loginPassword").addEventListener("keydown", (e) => { if (e.key === "Enter") doLogin(); });
+      document.getElementById("btnCloseAdmin").addEventListener("click", () => document.getElementById("adminOverlay").classList.remove("show"));
+      document.getElementById("btnLogout").addEventListener("click", doLogout);
+      document.getElementById("btnSaveCar").addEventListener("click", saveCar);
+      document.getElementById("btnClearCar").addEventListener("click", clearCarForm);
+      document.getElementById("btnSaveSettings").addEventListener("click", async () => {
+        readSettingsForm();
+        await saveSettings();
+        applySettingsToPage();
+        alert("Settings saved.");
+      });
+      document.querySelectorAll(".tab").forEach((t) => {
+        t.addEventListener("click", () => {
+          document.querySelectorAll(".tab").forEach((x) => x.classList.remove("active"));
+          document.querySelectorAll(".tab-pane").forEach((x) => x.classList.remove("show"));
+          t.classList.add("active");
+          document.getElementById(`tab-${t.dataset.tab}`).classList.add("show");
+        });
+      });
+      const zone = document.getElementById("uploadZone");
+      const input = document.getElementById("imageInput");
+      zone.addEventListener("click", () => input.click());
+      zone.addEventListener("dragover", (e) => { e.preventDefault(); zone.style.borderColor = "var(--gold)"; });
+      zone.addEventListener("dragleave", () => { zone.style.borderColor = "var(--border)"; });
+      zone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        zone.style.borderColor = "var(--border)";
+        const files = Array.from(e.dataTransfer.files || []);
+        addFiles(files);
+      });
+      input.addEventListener("change", () => addFiles(Array.from(input.files || [])));
+    }
+
+    function addFiles(files) {
+      const imgs = files.filter((f) => f.type.startsWith("image/"));
+      selectedFiles = [...selectedFiles, ...imgs].slice(0, 10);
+      renderThumbs();
+    }
+
+    async function init() {
+      bindEvents();
+      await fetchSettings();
+      await fetchCars();
+      if (hasSupabaseConfig) {
+        const user = await checkSession();
+        if (user) {
+          currentUser = user;
+          showUserBar();
+        }
+      }
+    }
+    init();
+  </script>
+</body>
+</html>
