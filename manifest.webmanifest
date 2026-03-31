@@ -1,0 +1,19 @@
+{
+  "name": "ASM ອາມສັ່ງມາ - Used Cars",
+  "short_name": "ASM Cars",
+  "description": "Luxury used car showroom app for Vientiane, Laos.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#080808",
+  "theme_color": "#080808",
+  "lang": "lo",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

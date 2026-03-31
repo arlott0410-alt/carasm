@@ -8,6 +8,13 @@
   <meta name="keywords" content="ລົດມືສອງ ວຽງຈັນ, used car Laos, used car Vientiane, ASM ອາມສັ່ງມາ, second hand car Vientiane">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://asmcars.la/">
+  <meta name="theme-color" content="#080808">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ASM Cars">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icons/icon.svg">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ASM ອາມສັ່ງມາ | Used Cars Vientiane">
   <meta property="og:description" content="Quality used cars in Vientiane with transparent pricing and fast WhatsApp support.">
@@ -272,6 +279,19 @@
     .step { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
     .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .panel { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 16px; }
+    .lux-border {
+      border: 1px solid rgba(201,168,76,.35);
+      box-shadow: 0 0 0 1px rgba(201,168,76,.08) inset, 0 16px 50px rgba(0,0,0,.35);
+    }
+    .btn-gold {
+      background: linear-gradient(135deg, #d2b25a, #b8922e);
+      color: #111;
+      box-shadow: 0 10px 24px rgba(201,168,76,.22);
+    }
+    .btn-gold:hover { filter: brightness(1.06); transform: translateY(-1px); }
+    .card, .panel, .search-bar, .admin-modal, .hero-panel {
+      box-shadow: 0 14px 42px rgba(0,0,0,.30);
+    }
     footer { border-top: 1px solid var(--border); margin-top: 24px; padding: 24px 0 36px; color: var(--muted); }
     .fab {
       position: fixed;
@@ -288,6 +308,14 @@
       cursor: pointer;
     }
     .fab:hover { background: var(--gold); color: #121212; }
+    .install-fab {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 70;
+      display: none;
+    }
+    .install-fab.show { display: block; }
     .overlay {
       position: fixed;
       inset: 0;
@@ -442,7 +470,7 @@
             <div><strong>200+</strong><span data-lo>ຂາຍແລ້ວ</span><span data-en>Cars sold</span></div>
           </div>
         </div>
-        <div class="hero-panel">
+        <div class="hero-panel lux-border">
           <div class="ring">🚗</div>
           <div class="float-badge badge-a"><span class="dot green"></span><span data-lo>ພ້ອມນັດເບິ່ງລົດມື້ນີ້</span><span data-en>View today available</span></div>
           <div class="float-badge badge-b"><span class="dot amber"></span><span data-lo>ຕອບ WA ໄວກວ່າ 1 ຊົ່ວໂມງ</span><span data-en>WA reply in under 1 hour</span></div>
@@ -461,7 +489,7 @@
         <div class="warn-banner" id="cfgWarn">
           Supabase config is missing. Running in demo mode. Set environment variables in Cloudflare Pages.
         </div>
-        <div class="search-bar">
+        <div class="search-bar lux-border">
           <select id="filterBrand"><option value="">Brand</option></select>
           <select id="filterStatus">
             <option value="">Status</option>
@@ -486,7 +514,7 @@
     </section>
 
     <section class="section">
-      <div class="container stats-strip">
+      <div class="container stats-strip lux-border">
         <div><strong>100%</strong><div class="muted" data-lo>ຂໍ້ມູນຈິງ</div><div class="muted" data-en>Real data only</div></div>
         <div><strong id="statsCarCount">0</strong><div class="muted" data-lo>ລົດທີ່ມີ</div><div class="muted" data-en>Cars in stock</div></div>
         <div><strong>&lt;1h</strong><div class="muted" data-lo>ຕອບ WA</div><div class="muted" data-en>WA response</div></div>
@@ -509,14 +537,14 @@
 
     <section id="contact" class="section">
       <div class="container contact-grid">
-        <div class="panel">
+        <div class="panel lux-border">
           <h3 class="serif" style="font-size:34px;margin:0 0 8px;" data-dyn="shop-name">ASM ອາມສັ່ງມາ</h3>
           <p class="muted" data-dyn="tagline-en">Reliable used cars with transparent prices in Vientiane.</p>
           <p><strong>WhatsApp:</strong> <a data-dyn="wa-href" href="https://wa.me/85695043892" target="_blank" rel="noreferrer" data-dyn-text="wa-number">+856 95 043 892</a></p>
           <p><strong>Phone:</strong> <a data-dyn="phone-href" href="tel:+85695043892" data-dyn-text="phone-number">+856 95 043 892</a></p>
           <p class="muted" data-dyn="location-lo">ນະຄອນຫຼວງວຽງຈັນ, ລາວ</p>
         </div>
-        <form class="panel" id="waForm">
+        <form class="panel lux-border" id="waForm">
           <h3 class="serif" style="font-size:30px;margin:0 0 10px;"><span data-lo>ສົ່ງຂໍ້ຄວາມຜ່ານ WA</span><span data-en>Send WhatsApp Message</span></h3>
           <input id="waName" placeholder="Name / ຊື່">
           <input id="waPhone" placeholder="Phone / ເບີ">
@@ -541,6 +569,7 @@
   </footer>
 
   <button class="fab" id="adminFab" title="Admin">⚙</button>
+  <button class="btn btn-gold install-fab" id="installBtn" title="Install App">Install App</button>
 
   <div class="overlay" id="loginOverlay">
     <div class="login-wrap">
@@ -1128,8 +1157,39 @@
       renderThumbs();
     }
 
+    let deferredInstallPrompt = null;
+
+    function setupPwaInstall() {
+      const installBtn = document.getElementById("installBtn");
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        installBtn.classList.add("show");
+      });
+      installBtn.addEventListener("click", async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        installBtn.classList.remove("show");
+      });
+      window.addEventListener("appinstalled", () => {
+        installBtn.classList.remove("show");
+      });
+    }
+
+    function registerServiceWorker() {
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker.register("/sw.js").catch(() => {});
+        });
+      }
+    }
+
     async function init() {
       bindEvents();
+      setupPwaInstall();
+      registerServiceWorker();
       await fetchSettings();
       await fetchCars();
       if (hasSupabaseConfig) {
