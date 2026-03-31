@@ -422,6 +422,73 @@
       cursor: pointer;
     }
     .helper { color: var(--muted); font-size: 12px; margin-top: 6px; }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 95;
+      background: rgba(0,0,0,.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .lightbox.show { display: flex; }
+    .lightbox-inner {
+      width: min(1120px, 96vw);
+      max-height: 92vh;
+      position: relative;
+      border: 1px solid rgba(201,168,76,.35);
+      border-radius: 12px;
+      overflow: hidden;
+      background: #0d0d0d;
+      box-shadow: 0 20px 80px rgba(0,0,0,.5);
+    }
+    .lightbox-img {
+      width: 100%;
+      height: min(78vh, 760px);
+      object-fit: contain;
+      display: block;
+      background: #080808;
+    }
+    .lb-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.5);
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .lb-prev { left: 12px; }
+    .lb-next { right: 12px; }
+    .lb-close {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.5);
+      color: #fff;
+      font-size: 19px;
+      cursor: pointer;
+    }
+    .lb-meta {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: #e8e6e1;
+    }
     .progress {
       width: 100%;
       height: 8px;
@@ -712,6 +779,16 @@
     </div>
   </div>
 
+  <div class="lightbox" id="lightbox">
+    <div class="lightbox-inner">
+      <img id="lbImage" class="lightbox-img" src="" alt="Car image">
+      <button type="button" class="lb-btn lb-prev" id="lbPrev">‹</button>
+      <button type="button" class="lb-btn lb-next" id="lbNext">›</button>
+      <button type="button" class="lb-close" id="lbClose">✕</button>
+      <div class="lb-meta" id="lbMeta">1 / 1</div>
+    </div>
+  </div>
+
   <script>
     const ENV = window.__ENV || {};
     const SUPABASE_URL = ENV.SUPABASE_URL || "";
@@ -739,6 +816,8 @@
     let existingPhotos = [];
     let editingId = null;
     let currentUser = null;
+    let lightboxImages = [];
+    let lightboxIdx = 0;
 
     const statusText = {
       lo: { available: "ພ້ອມຂາຍ", reserved: "ຈອງແລ້ວ", sold: "ຂາຍແລ້ວ" },
@@ -820,6 +899,32 @@
       wrap.querySelectorAll(".dot-mini").forEach((d, i) => d.classList.toggle("active", i === idx));
     }
     window.slideGal = slideGal;
+
+    function openLightbox(photos, startIdx) {
+      lightboxImages = Array.isArray(photos) ? photos : [];
+      if (!lightboxImages.length) return;
+      lightboxIdx = Number(startIdx || 0);
+      renderLightbox();
+      document.getElementById("lightbox").classList.add("show");
+    }
+
+    function renderLightbox() {
+      const img = document.getElementById("lbImage");
+      const meta = document.getElementById("lbMeta");
+      if (!lightboxImages.length) return;
+      img.src = lightboxImages[lightboxIdx];
+      meta.textContent = `${lightboxIdx + 1} / ${lightboxImages.length}`;
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").classList.remove("show");
+    }
+
+    function moveLightbox(dir) {
+      if (!lightboxImages.length) return;
+      lightboxIdx = (lightboxIdx + dir + lightboxImages.length) % lightboxImages.length;
+      renderLightbox();
+    }
 
     function applyFilter() {
       const brand = document.getElementById("filterBrand").value;
@@ -1224,6 +1329,26 @@
         addFiles(files);
       });
       input.addEventListener("change", () => addFiles(Array.from(input.files || [])));
+      document.getElementById("carGrid").addEventListener("click", (e) => {
+        const img = e.target.closest(".photo-wrap img[data-gallery]");
+        if (!img) return;
+        const photos = JSON.parse(img.dataset.gallery || "[]");
+        const idx = Number(img.dataset.idx || 0);
+        openLightbox(photos, idx);
+      });
+      document.getElementById("lbClose").addEventListener("click", closeLightbox);
+      document.getElementById("lbPrev").addEventListener("click", () => moveLightbox(-1));
+      document.getElementById("lbNext").addEventListener("click", () => moveLightbox(1));
+      document.getElementById("lightbox").addEventListener("click", (e) => {
+        if (e.target.id === "lightbox") closeLightbox();
+      });
+      document.addEventListener("keydown", (e) => {
+        const isOpen = document.getElementById("lightbox").classList.contains("show");
+        if (!isOpen) return;
+        if (e.key === "Escape") closeLightbox();
+        if (e.key === "ArrowLeft") moveLightbox(-1);
+        if (e.key === "ArrowRight") moveLightbox(1);
+      });
     }
 
     function addFiles(files) {
