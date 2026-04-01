@@ -641,6 +641,8 @@
       .hero-sub { font-size: 13px; line-height: 1.45; max-width: 100%; }
       .hero-stats { gap: 12px; flex-wrap: wrap; }
       .hero-stats strong { font-size: 16px; }
+      .hero-cta { gap: 8px; }
+      .hero-cta .btn { flex: 1; text-align: center; min-height: 42px; }
       .section { padding: 30px 0; }
       h2.serif { font-size: 30px !important; line-height: 1.15; }
       .contact-grid h3.serif { font-size: 24px !important; line-height: 1.2; }
@@ -648,6 +650,8 @@
       .model { font-size: 25px; }
       .price-overlay { font-size: 23px; }
       .search-bar { grid-template-columns: 1fr; padding: 10px; }
+      .search-bar .btn { min-height: 42px; }
+      select, input, textarea { min-height: 42px; font-size: 14px; }
       .stats-strip { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .steps { grid-template-columns: 1fr; }
       .grid2 { grid-template-columns: 1fr; }
@@ -665,6 +669,36 @@
       .admin-main { grid-area: main; }
       .admin-price { grid-area: price; text-align: left; margin-top: 4px; }
       .admin-actions { grid-area: actions; justify-content: flex-start; }
+    }
+    @media (max-width: 430px) {
+      .container { width: 94vw; }
+      .logo { font-size: 18px; }
+      h1 { font-size: clamp(24px, 8.4vw, 30px); }
+      .hero-sub { font-size: 12px; }
+      .hero-stats { gap: 10px; }
+      .hero-stats > div { min-width: calc(50% - 8px); }
+      .hero-stats strong { font-size: 15px; }
+      .price-overlay { font-size: 21px; left: 8px; bottom: 8px; }
+      .card-body { padding: 12px; }
+      .model { font-size: 23px; }
+      .desc { font-size: 13px; margin: 9px 0 11px; }
+      .steps .step { padding: 10px; font-size: 13px; }
+      .panel { padding: 13px; }
+      .tabs { gap: 6px; padding: 6px; }
+      .tab { padding: 7px 9px; font-size: 12px; }
+      .lightbox { padding: 8px; }
+      .lb-btn { width: 38px; height: 38px; }
+      .lb-close { width: 34px; height: 34px; }
+    }
+    @media (max-width: 390px) {
+      .logo-img { width: 30px; height: 30px; }
+      .logo { font-size: 17px; }
+      h1 { font-size: clamp(22px, 8vw, 27px); }
+      .hero-cta .btn { font-size: 12px; padding: 9px 10px; }
+      .model { font-size: 21px; }
+      .stats-strip { grid-template-columns: 1fr; }
+      .admin-list-item { grid-template-columns: 64px 1fr; padding: 8px; }
+      .admin-list-item img { width: 64px; height: 50px; }
     }
   </style>
 </head>
