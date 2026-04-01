@@ -1,4 +1,4 @@
-const CACHE_NAME = "asmcars-cache-v1";
+const CACHE_NAME = "asmcars-cache-v2";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -30,6 +30,23 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
+
+  const isDocument =
+    event.request.mode === "navigate" ||
+    event.request.destination === "document";
+
+  if (isDocument) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          const cloned = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned)).catch(() => null);
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match("/index.html")))
+    );
+    return;
+  }
 
   event.respondWith(
     caches.match(event.request).then((cached) => {

@@ -242,7 +242,7 @@
       overflow: hidden;
       background: #101010;
     }
-    .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; cursor: zoom-in; }
     .count-badge {
       position: absolute;
       top: 10px;
@@ -966,7 +966,7 @@
       return `
         <article class="card" data-id="${car.id}">
           <div class="photo-wrap">
-            <img src="${esc(photos[0])}" alt="${esc(car.brand)} ${esc(car.model)}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0">
+            <img src="${esc(photos[0])}" alt="${esc(car.brand)} ${esc(car.model)}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0" onclick="openLightboxFromEl(this)">
             <div class="photo-overlay"></div>
             <div class="count-badge">${photos.length} photos</div>
             <button class="gallery-nav left" onclick="slideGal(this,-1)" type="button">‹</button>
@@ -1027,6 +1027,12 @@
       renderLightbox();
       document.getElementById("lightbox").classList.add("show");
     }
+    window.openLightboxFromEl = function openLightboxFromEl(imgEl) {
+      if (!imgEl) return;
+      const photos = JSON.parse(imgEl.dataset.gallery || "[]");
+      const idx = Number(imgEl.dataset.idx || 0);
+      openLightbox(photos, idx);
+    };
 
     function renderLightbox() {
       const img = document.getElementById("lbImage");
