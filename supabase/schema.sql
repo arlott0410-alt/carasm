@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS cars (
   transmission  TEXT DEFAULT 'Auto',
   color         TEXT,
   price         BIGINT NOT NULL,
+  currency      TEXT DEFAULT 'LAK'
+                CHECK (currency IN ('LAK','THB','USD')),
   status        TEXT DEFAULT 'available'
                 CHECK (status IN ('available','reserved','sold')),
   desc_lo       TEXT,
