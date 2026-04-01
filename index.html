@@ -532,8 +532,75 @@
       display: none;
     }
     .progress span { display: block; height: 100%; width: 0; background: var(--gold); }
-    .admin-list-item { display: grid; grid-template-columns: 66px 1fr auto; gap: 10px; align-items: center; border-bottom: 1px solid var(--border); padding: 8px 0; }
-    .admin-list-item img { width: 66px; height: 50px; object-fit: cover; border-radius: 7px; border: 1px solid var(--border); }
+    .admin-list {
+      display: grid;
+      gap: 10px;
+    }
+    .admin-list-head {
+      display: grid;
+      grid-template-columns: 80px 1fr 160px 130px;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 0 10px;
+    }
+    .admin-list-item {
+      display: grid;
+      grid-template-columns: 80px 1fr 160px 130px;
+      gap: 10px;
+      align-items: center;
+      padding: 10px;
+      border: 1px solid rgba(201,168,76,.18);
+      border-radius: 12px;
+      background: linear-gradient(180deg, #141414, #101010);
+    }
+    .admin-list-item img {
+      width: 80px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    .admin-main {
+      display: grid;
+      gap: 3px;
+      min-width: 0;
+    }
+    .admin-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #f3efe8;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .admin-sub {
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .admin-price {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 28px;
+      line-height: 1;
+      color: var(--gold);
+      text-align: right;
+    }
+    .admin-actions {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .admin-actions .btn {
+      padding: 7px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
     .warn-banner {
       display: none;
       background: #2a2013;
@@ -562,6 +629,18 @@
       .stats-strip { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .steps { grid-template-columns: 1fr; }
       .grid2 { grid-template-columns: 1fr; }
+      .admin-list-head { display: none; }
+      .admin-list-item {
+        grid-template-columns: 72px 1fr;
+        grid-template-areas:
+          "thumb main"
+          "price price"
+          "actions actions";
+      }
+      .admin-list-item img { grid-area: thumb; width: 72px; height: 56px; }
+      .admin-main { grid-area: main; }
+      .admin-price { grid-area: price; text-align: left; margin-top: 4px; }
+      .admin-actions { grid-area: actions; justify-content: flex-start; }
     }
   </style>
 </head>
@@ -1313,22 +1392,34 @@
 
     function loadAdminList() {
       const root = document.getElementById("adminList");
-      root.innerHTML = cars.map((c) => {
+      root.innerHTML = `
+        <div class="admin-list">
+          <div class="admin-list-head">
+            <div>Photo</div>
+            <div>Car</div>
+            <div style="text-align:right;">Price</div>
+            <div style="text-align:right;">Actions</div>
+          </div>
+          ${cars.map((c) => {
         const thumb = c.photos && c.photos[0] ? c.photos[0] : "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=60";
         return `
           <div class="admin-list-item">
             <img src="${esc(thumb)}" alt="">
-            <div>
-              <div>${esc(c.brand)} ${esc(c.model)} · ${esc(c.year)} · ${esc(c.mileage || 0)} km</div>
-              <div class="muted">${formatPrice(c.price, c.currency || "LAK")} · ${Array.isArray(c.photos) ? c.photos.length : 0} photos</div>
+            <div class="admin-main">
+              <div class="admin-title">${esc(c.brand)} ${esc(c.model)}</div>
+              <div class="admin-sub">${esc(c.year)} · ${esc(c.mileage || 0)} km · ${esc(c.transmission || "Auto")} · ${esc(c.color || "-")}</div>
+              <div class="admin-sub">${Array.isArray(c.photos) ? c.photos.length : 0} photos</div>
             </div>
-            <div style="display:flex;gap:6px;">
+            <div class="admin-price">${formatPrice(c.price, c.currency || "LAK")}</div>
+            <div class="admin-actions">
               <button class="btn btn-ghost" type="button" onclick="editCar(${c.id})">Edit</button>
+              <button class="btn btn-ghost" type="button" onclick="deleteCar(${c.id})">Delete</button>
             </div>
-            <button class="btn btn-ghost" type="button" onclick="deleteCar(${c.id})">Delete</button>
           </div>
         `;
-      }).join("");
+      }).join("")}
+        </div>
+      `;
     }
 
     function setLang(l) {
