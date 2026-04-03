@@ -1,4 +1,4 @@
-const CACHE_NAME = "asmcars-cache-v3";
+const CACHE_NAME = "asmcars-cache-v4";
 const APP_SHELL = [
   "/",
   "/index.html",
@@ -49,16 +49,17 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Network-first for assets (including images) so updates are visible,
+  // with cache as a fallback when offline.
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      if (cached) return cached;
-      return fetch(event.request)
-        .then((response) => {
-          const cloned = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned)).catch(() => null);
-          return response;
-        })
-        .catch(() => caches.match("/index.html"));
-    })
+    fetch(event.request)
+      .then((response) => {
+        const cloned = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(event.request, cloned)).catch(() => null);
+        return response;
+      })
+      .catch(() =>
+        caches.match(event.request).then((cached) => cached || caches.match("/index.html"))
+      )
   );
 });
