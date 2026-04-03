@@ -211,7 +211,7 @@
     .section { padding: 48px 0; }
     .search-bar {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
       background: var(--card);
       border: 1px solid var(--border);
@@ -769,13 +769,6 @@
         </div>
         <div class="search-bar lux-border">
           <select id="filterBrand"><option value="">Brand</option></select>
-          <select id="filterPrice">
-            <option value="">Price</option>
-            <option value="0-100000000">0 - 100M LAK</option>
-            <option value="100000000-250000000">100M - 250M LAK</option>
-            <option value="250000000-500000000">250M - 500M LAK</option>
-            <option value="500000000-10000000000">500M+ LAK</option>
-          </select>
           <select id="filterYear">
             <option value="">Year</option>
           </select>
@@ -1160,17 +1153,10 @@
 
     function applyFilter() {
       const brand = document.getElementById("filterBrand").value;
-      const price = document.getElementById("filterPrice").value;
       const year = document.getElementById("filterYear").value;
       filteredCars = cars.filter((c) => {
         if (brand && c.brand !== brand) return false;
         if (year && String(c.year) !== year) return false;
-        if (price) {
-          const parts = price.split("-");
-          const low = Number(parts[0] || 0);
-          const high = Number(parts[1] || Number.MAX_SAFE_INTEGER);
-          if (Number(c.price) < low || Number(c.price) > high) return false;
-        }
         return true;
       });
       renderCars(filteredCars);
@@ -1567,7 +1553,7 @@
       document.getElementById("btnLo").addEventListener("click", () => setLang("lo"));
       document.getElementById("btnEn").addEventListener("click", () => setLang("en"));
       document.getElementById("btnSearch").addEventListener("click", applyFilter);
-      ["filterBrand","filterPrice","filterYear"].forEach((id) => {
+      ["filterBrand","filterYear"].forEach((id) => {
         document.getElementById(id).addEventListener("change", applyFilter);
       });
       document.getElementById("carPrice").addEventListener("input", (e) => {
