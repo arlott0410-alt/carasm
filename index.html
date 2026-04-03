@@ -1464,9 +1464,36 @@
       setProgress(0, false);
     }
 
+    async function deleteCarStorageImages(carId) {
+      const folder = String(carId);
+      const bucket = supa.storage.from("car-images");
+      const paths = [];
+      let offset = 0;
+      const pageSize = 100;
+      for (;;) {
+        const { data: items, error: listErr } = await bucket.list(folder, {
+          limit: pageSize,
+          offset,
+          sortBy: { column: "name", order: "asc" }
+        });
+        if (listErr) return listErr;
+        if (!items || !items.length) break;
+        items.forEach((item) => {
+          if (item && item.name) paths.push(`${folder}/${item.name}`);
+        });
+        if (items.length < pageSize) break;
+        offset += pageSize;
+      }
+      if (!paths.length) return null;
+      const { error: rmErr } = await bucket.remove(paths);
+      return rmErr || null;
+    }
+
     async function deleteCar(id) {
       if (!supa) return;
       if (!confirm("Delete this car?")) return;
+      const storageErr = await deleteCarStorageImages(id);
+      if (storageErr) alert(`Could not delete all images in Storage: ${storageErr.message}. The car listing will still be removed.`);
       const { error } = await supa.from("cars").delete().eq("id", id);
       if (error) return alert(error.message);
       cars = cars.filter((c) => c.id !== id);
