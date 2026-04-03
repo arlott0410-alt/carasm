@@ -894,11 +894,8 @@
             <option value="">Brand</option>
             <option>Toyota</option><option>Honda</option><option>Mazda</option><option>Hyundai</option><option>Kia</option><option>MG</option><option>BYD</option><option>Mitsubishi</option><option>Isuzu</option><option>Nissan</option><option>Ford</option><option>Other</option>
           </select></div>
-          <div class="field"><label>Model</label><input id="carModel" placeholder="Model"></div>
           <div class="field"><label>Year</label><input id="carYear" type="number" placeholder="Year"></div>
-          <div class="field"><label>Mileage (km)</label><input id="carMileage" type="number" placeholder="Mileage (km)"></div>
           <div class="field"><label>Transmission</label><select id="carTransmission"><option>Auto</option><option>Manual</option><option>CVT</option><option>E-CVT</option></select></div>
-          <div class="field"><label>Color</label><input id="carColor" placeholder="Color"></div>
           <div class="field"><label>Currency</label><select id="carCurrency"><option value="LAK">LAK</option><option value="THB">THB (฿)</option><option value="USD">USD ($)</option></select></div>
           <div class="field"><label>Price</label><input id="carPrice" inputmode="numeric" placeholder="0"></div>
           <div class="field"><label>Description Lao</label><textarea id="carDescLo" placeholder="Description Lao"></textarea></div>
@@ -1032,6 +1029,19 @@
       return String(str || "").replace(/[&<>"']/g, (s) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[s]));
     }
 
+    function carModelLabel(m) {
+      const s = String(m || "").trim();
+      return s && s !== "-" ? s : "";
+    }
+
+    function carSpecParts(car) {
+      const parts = [String(car.year || ""), car.transmission || "Auto"];
+      if (Number(car.mileage) > 0) parts.push(`${car.mileage} km`);
+      const col = String(car.color || "").trim();
+      if (col) parts.push(col);
+      return parts.filter(Boolean);
+    }
+
     function buildCard(car, lang) {
       const realPhotos = Array.isArray(car.photos) ? car.photos.filter(Boolean) : [];
       const hasPhotos = realPhotos.length > 0;
@@ -1041,10 +1051,12 @@
         ? `${realPhotos.length} <span data-lo>ຮູບ</span><span data-en>photos</span>`
         : `<span data-lo>ບໍ່ມີຮູບ</span><span data-en>No photo</span>`;
       const phAttr = hasPhotos ? "" : ' data-placeholder="1"';
+      const ml = carModelLabel(car.model);
+      const altBits = [car.brand, ml, String(car.year || "")].filter(Boolean);
       return `
         <article class="card" data-id="${car.id}">
           <div class="photo-wrap">
-            <img src="${esc(photos[0])}" alt="${esc(car.brand)} ${esc(car.model)}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0" onclick="openLightboxFromEl(this)"${phAttr}>
+            <img src="${esc(photos[0])}" alt="${esc(altBits.join(" "))}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0" onclick="openLightboxFromEl(this)"${phAttr}>
             <div class="photo-overlay"></div>
             <div class="count-badge">${photoBadge}</div>
             <button class="gallery-nav left" onclick="slideGal(this,-1)" type="button">‹</button>
@@ -1054,13 +1066,8 @@
           </div>
           <div class="card-body">
             <div class="brand">${esc(car.brand)}</div>
-            <div class="model">${esc(car.model)}</div>
-            <div class="specs">
-              <span>${esc(car.year)}</span>
-              <span>${esc(car.transmission || "Auto")}</span>
-              <span>${esc(car.mileage || 0)} km</span>
-              <span>${esc(car.color || "-")}</span>
-            </div>
+            ${ml ? `<div class="model">${esc(ml)}</div>` : ""}
+            <div class="specs">${carSpecParts(car).map((p) => `<span>${esc(p)}</span>`).join("")}</div>
             <div class="desc">${esc(desc).slice(0, 72)}${desc.length > 72 ? "..." : ""}</div>
             <a class="btn btn-wa" style="display:block;text-align:center;" href="${buildWaHref(car)}" target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
@@ -1070,7 +1077,8 @@
 
     function buildWaHref(car) {
       const num = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
-      const text = encodeURIComponent(`ສະບາຍດີ, ສົນໃຈລົດ ${car.brand} ${car.model} ${car.year} (${formatPrice(car.price, car.currency || "LAK")})`);
+      const ml = carModelLabel(car.model);
+      const text = encodeURIComponent(`ສະບາຍດີ, ສົນໃຈລົດ ${car.brand}${ml ? " " + ml : ""} ${car.year} (${formatPrice(car.price, car.currency || "LAK")})`);
       return `https://wa.me/${num}?text=${text}`;
     }
 
@@ -1171,7 +1179,10 @@
 
     function populateCarSelect() {
       const el = document.getElementById("waCarSelect");
-      el.innerHTML = '<option value="">Car of interest / ລົດທີ່ສົນໃຈ</option>' + cars.map((c) => `<option value="${c.id}">${esc(c.brand)} ${esc(c.model)} ${esc(c.year)}</option>`).join("");
+      el.innerHTML = '<option value="">Car of interest / ລົດທີ່ສົນໃຈ</option>' + cars.map((c) => {
+        const ml = carModelLabel(c.model);
+        return `<option value="${c.id}">${esc(c.brand)}${ml ? " " + esc(ml) : ""} ${esc(c.year)}</option>`;
+      }).join("");
     }
 
     function populateBrandFilter() {
@@ -1323,13 +1334,14 @@
     }
 
     function readCarForm() {
+      const prev = editingId ? cars.find((x) => x.id === editingId) : null;
       return {
         brand: document.getElementById("carBrand").value.trim(),
-        model: document.getElementById("carModel").value.trim(),
+        model: prev && prev.model && String(prev.model).trim() ? String(prev.model).trim() : "-",
         year: Number(document.getElementById("carYear").value || 0),
-        mileage: Number(document.getElementById("carMileage").value || 0),
+        mileage: prev ? Number(prev.mileage || 0) : 0,
         transmission: document.getElementById("carTransmission").value,
-        color: document.getElementById("carColor").value.trim(),
+        color: prev ? String(prev.color || "").trim() : "",
         price: parseNumericInput(document.getElementById("carPrice").value),
         currency: document.getElementById("carCurrency").value,
         desc_lo: document.getElementById("carDescLo").value.trim(),
@@ -1340,7 +1352,7 @@
     function clearCarForm() {
       editingId = null;
       existingPhotos = [];
-      ["carBrand","carModel","carYear","carMileage","carTransmission","carColor","carPrice","carCurrency","carDescLo","carDescEn"].forEach((id) => {
+      ["carBrand","carYear","carTransmission","carPrice","carCurrency","carDescLo","carDescEn"].forEach((id) => {
         const el = document.getElementById(id);
         if (!el) return;
         if (el.tagName === "SELECT") el.selectedIndex = 0;
@@ -1413,7 +1425,7 @@
     async function saveCar() {
       if (!supa) return alert("Supabase not configured.");
       const payload = readCarForm();
-      if (!payload.brand || !payload.model || !payload.year || !payload.price) return alert("Please fill required fields.");
+      if (!payload.brand || !payload.year || !payload.price) return alert("Please fill required fields.");
       let carId = editingId;
       let savedRow = null;
       if (!editingId) {
@@ -1506,11 +1518,8 @@
       if (!c) return;
       editingId = id;
       document.getElementById("carBrand").value = c.brand || "";
-      document.getElementById("carModel").value = c.model || "";
       document.getElementById("carYear").value = c.year || "";
-      document.getElementById("carMileage").value = c.mileage || "";
       document.getElementById("carTransmission").value = c.transmission || "Auto";
-      document.getElementById("carColor").value = c.color || "";
       document.getElementById("carPrice").value = formatNumericInput(c.price || 0);
       document.getElementById("carCurrency").value = c.currency || "LAK";
       document.getElementById("carDescLo").value = c.desc_lo || "";
@@ -1535,12 +1544,14 @@
           </div>
           ${cars.map((c) => {
         const thumb = c.photos && c.photos[0] ? c.photos[0] : PLACEHOLDER_PHOTO;
+        const aml = carModelLabel(c.model);
+        const specLine = carSpecParts(c).map((p) => esc(p)).join(" · ");
         return `
           <div class="admin-list-item">
             <img src="${esc(thumb)}" alt="">
             <div class="admin-main">
-              <div class="admin-title">${esc(c.brand)} ${esc(c.model)}</div>
-              <div class="admin-sub">${esc(c.year)} · ${esc(c.mileage || 0)} km · ${esc(c.transmission || "Auto")} · ${esc(c.color || "-")}</div>
+              <div class="admin-title">${esc(c.brand)}${aml ? " " + esc(aml) : ""}</div>
+              <div class="admin-sub">${specLine}</div>
               <div class="admin-sub">${Array.isArray(c.photos) ? c.photos.length : 0} photos</div>
             </div>
             <div class="admin-price">${formatPrice(c.price, c.currency || "LAK")}</div>
@@ -1594,7 +1605,12 @@
         const car = cars.find((x) => x.id === carId);
         const msg = document.getElementById("waMsg").value.trim();
         const target = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
-        const text = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nCar: ${car ? `${car.brand} ${car.model}` : "-"}\nMessage: ${msg}`);
+        let carLine = "-";
+        if (car) {
+          const wm = carModelLabel(car.model);
+          carLine = `${car.brand}${wm ? " " + wm : ""} ${car.year}`.trim();
+        }
+        const text = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nCar: ${carLine}\nMessage: ${msg}`);
         window.open(`https://wa.me/${target}?text=${text}`, "_blank", "noopener,noreferrer");
       });
       document.getElementById("adminFab").addEventListener("click", openAdminFlow);
