@@ -958,6 +958,14 @@
       </div>
 
       <div class="tab-pane" id="tab-list">
+        <div style="display:flex;gap:8px;align-items:center;margin:10px 0 6px;">
+          <select id="adminFilterBrand" style="max-width:180px;">
+            <option value="">All brands</option>
+          </select>
+          <select id="adminFilterYear" style="max-width:140px;">
+            <option value="">All years</option>
+          </select>
+        </div>
         <div id="adminList"></div>
       </div>
 
@@ -1227,7 +1235,22 @@
       updateStats();
       populateCarSelect();
       populateBrandFilter();
+      populateAdminFilters();
       loadAdminList();
+    }
+
+    function populateAdminFilters() {
+      const brandEl = document.getElementById("adminFilterBrand");
+      const yearEl = document.getElementById("adminFilterYear");
+      if (!brandEl || !yearEl) return;
+      const brands = [...new Set(cars.map((c) => c.brand).filter(Boolean))].sort();
+      const years = [...new Set(cars.map((c) => c.year).filter(Boolean))].sort((a, b) => b - a);
+      const currentBrand = brandEl.value;
+      const currentYear = yearEl.value;
+      brandEl.innerHTML = '<option value="">All brands</option>' + brands.map((b) => `<option value="${esc(b)}">${esc(b)}</option>`).join("");
+      yearEl.innerHTML = '<option value="">All years</option>' + years.map((y) => `<option value="${y}">${y}</option>`).join("");
+      if (currentBrand) brandEl.value = currentBrand;
+      if (currentYear) yearEl.value = currentYear;
     }
 
     function setInventoryBannerDemo() {
@@ -1604,12 +1627,23 @@
     window.editCar = editCar;
 
     function loadAdminList() {
-      const total = cars.length;
+      const brandEl = document.getElementById("adminFilterBrand");
+      const yearEl = document.getElementById("adminFilterYear");
+      const brandFilter = brandEl ? brandEl.value : "";
+      const yearFilter = yearEl ? yearEl.value : "";
+
+      const filtered = cars.filter((c) => {
+        if (brandFilter && c.brand !== brandFilter) return false;
+        if (yearFilter && String(c.year) !== String(yearFilter)) return false;
+        return true;
+      });
+
+      const total = filtered.length;
       const totalPages = Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE));
       if (adminPage > totalPages) adminPage = totalPages;
       if (adminPage < 1) adminPage = 1;
       const start = (adminPage - 1) * ADMIN_PAGE_SIZE;
-      const pageItems = cars.slice(start, start + ADMIN_PAGE_SIZE);
+      const pageItems = filtered.slice(start, start + ADMIN_PAGE_SIZE);
 
       const root = document.getElementById("adminList");
       root.innerHTML = `
@@ -1690,6 +1724,10 @@
       document.getElementById("carPrice").addEventListener("input", (e) => {
         e.target.value = formatNumericInput(e.target.value);
       });
+      const adminBrand = document.getElementById("adminFilterBrand");
+      const adminYear = document.getElementById("adminFilterYear");
+      if (adminBrand) adminBrand.addEventListener("change", () => { adminPage = 1; loadAdminList(); });
+      if (adminYear) adminYear.addEventListener("change", () => { adminPage = 1; loadAdminList(); });
       document.getElementById("waForm").addEventListener("submit", (e) => {
         e.preventDefault();
         const name = document.getElementById("waName").value.trim();
