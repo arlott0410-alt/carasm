@@ -270,8 +270,7 @@
       z-index: 2;
     }
     .card-body { padding: 14px; }
-    .brand { color: var(--muted); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
-    .model { margin: 5px 0 10px; font-family: "Cormorant Garamond", serif; font-size: 31px; line-height: .95; }
+    .brand { color: var(--muted); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 8px; }
     .specs { color: var(--muted); font-size: 13px; display: flex; flex-wrap: wrap; gap: 7px 12px; }
     .desc { color: #c8c4c0; margin: 11px 0 13px; min-height: 40px; font-size: 14px; }
     .gallery-nav {
@@ -647,7 +646,6 @@
       h2.serif { font-size: 30px !important; line-height: 1.15; }
       .contact-grid h3.serif { font-size: 24px !important; line-height: 1.2; }
       .cards { grid-template-columns: 1fr; }
-      .model { font-size: 25px; }
       .price-overlay { font-size: 23px; }
       .search-bar { grid-template-columns: 1fr; padding: 10px; }
       .search-bar .btn { min-height: 42px; }
@@ -680,7 +678,6 @@
       .hero-stats strong { font-size: 15px; }
       .price-overlay { font-size: 21px; left: 8px; bottom: 8px; }
       .card-body { padding: 12px; }
-      .model { font-size: 23px; }
       .desc { font-size: 13px; margin: 9px 0 11px; }
       .steps .step { padding: 10px; font-size: 13px; }
       .panel { padding: 13px; }
@@ -695,7 +692,6 @@
       .logo { font-size: 17px; }
       h1 { font-size: clamp(22px, 8vw, 27px); }
       .hero-cta .btn { font-size: 12px; padding: 9px 10px; }
-      .model { font-size: 21px; }
       .stats-strip { grid-template-columns: 1fr; }
       .admin-list-item { grid-template-columns: 64px 1fr; padding: 8px; }
       .admin-list-item img { width: 64px; height: 50px; }
@@ -1021,25 +1017,16 @@
       return { ...row, currency: row.currency || "LAK" };
     }
 
-    const CARS_SELECT_FULL = "id,brand,model,year,mileage,transmission,color,price,currency,desc_lo,desc_en,photos,created_at,updated_at";
-    const CARS_SELECT_LEGACY = "id,brand,model,year,mileage,transmission,color,price,desc_lo,desc_en,photos,created_at,updated_at";
+    const CARS_SELECT_FULL = "id,brand,year,transmission,price,currency,desc_lo,desc_en,photos,created_at,updated_at";
+    const CARS_SELECT_LEGACY = "id,brand,year,transmission,price,desc_lo,desc_en,photos,created_at,updated_at";
     const PLACEHOLDER_PHOTO = "/icons/no-photo.svg";
 
     function esc(str) {
       return String(str || "").replace(/[&<>"']/g, (s) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[s]));
     }
 
-    function carModelLabel(m) {
-      const s = String(m || "").trim();
-      return s && s !== "-" ? s : "";
-    }
-
     function carSpecParts(car) {
-      const parts = [String(car.year || ""), car.transmission || "Auto"];
-      if (Number(car.mileage) > 0) parts.push(`${car.mileage} km`);
-      const col = String(car.color || "").trim();
-      if (col) parts.push(col);
-      return parts.filter(Boolean);
+      return [String(car.year || ""), car.transmission || "Auto"].filter(Boolean);
     }
 
     function buildCard(car, lang) {
@@ -1051,8 +1038,7 @@
         ? `${realPhotos.length} <span data-lo>ຮູບ</span><span data-en>photos</span>`
         : `<span data-lo>ບໍ່ມີຮູບ</span><span data-en>No photo</span>`;
       const phAttr = hasPhotos ? "" : ' data-placeholder="1"';
-      const ml = carModelLabel(car.model);
-      const altBits = [car.brand, ml, String(car.year || "")].filter(Boolean);
+      const altBits = [car.brand, String(car.year || "")].filter(Boolean);
       return `
         <article class="card" data-id="${car.id}">
           <div class="photo-wrap">
@@ -1066,7 +1052,6 @@
           </div>
           <div class="card-body">
             <div class="brand">${esc(car.brand)}</div>
-            ${ml ? `<div class="model">${esc(ml)}</div>` : ""}
             <div class="specs">${carSpecParts(car).map((p) => `<span>${esc(p)}</span>`).join("")}</div>
             <div class="desc">${esc(desc).slice(0, 72)}${desc.length > 72 ? "..." : ""}</div>
             <a class="btn btn-wa" style="display:block;text-align:center;" href="${buildWaHref(car)}" target="_blank" rel="noreferrer">WhatsApp</a>
@@ -1077,8 +1062,7 @@
 
     function buildWaHref(car) {
       const num = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
-      const ml = carModelLabel(car.model);
-      const text = encodeURIComponent(`ສະບາຍດີ, ສົນໃຈລົດ ${car.brand}${ml ? " " + ml : ""} ${car.year} (${formatPrice(car.price, car.currency || "LAK")})`);
+      const text = encodeURIComponent(`ສະບາຍດີ, ສົນໃຈລົດ ${car.brand} ${car.year} (${formatPrice(car.price, car.currency || "LAK")})`);
       return `https://wa.me/${num}?text=${text}`;
     }
 
@@ -1180,8 +1164,7 @@
     function populateCarSelect() {
       const el = document.getElementById("waCarSelect");
       el.innerHTML = '<option value="">Car of interest / ລົດທີ່ສົນໃຈ</option>' + cars.map((c) => {
-        const ml = carModelLabel(c.model);
-        return `<option value="${c.id}">${esc(c.brand)}${ml ? " " + esc(ml) : ""} ${esc(c.year)}</option>`;
+        return `<option value="${c.id}">${esc(c.brand)} ${esc(c.year)}</option>`;
       }).join("");
     }
 
@@ -1235,9 +1218,9 @@
     function renderDemoCards() {
       setInventoryBannerDemo();
       cars = [
-        { id: 1001, brand: "Toyota", model: "Hilux Revo", year: 2019, mileage: 74000, transmission: "Auto", color: "White", price: 389000000, currency: "LAK", desc_lo: "ເຄື່ອງດີ ພ້ອມໃຊ້ງານ", desc_en: "Reliable pickup, clean interior", photos: [] },
-        { id: 1002, brand: "Honda", model: "CR-V", year: 2018, mileage: 82000, transmission: "CVT", color: "Black", price: 335000000, currency: "THB", desc_lo: "ລົດຄອບຄົວຍອດນິຍົມ", desc_en: "Family SUV with full options", photos: [] },
-        { id: 1003, brand: "Mitsubishi", model: "Pajero Sport", year: 2017, mileage: 99000, transmission: "Auto", color: "Gray", price: 31800, currency: "USD", desc_lo: "ປະຫວັດການເຂົ້າສູນຄົບ", desc_en: "Service history available", photos: [] }
+        { id: 1001, brand: "Toyota", year: 2019, transmission: "Auto", price: 389000000, currency: "LAK", desc_lo: "ເຄື່ອງດີ ພ້ອມໃຊ້ງານ", desc_en: "Reliable pickup, clean interior", photos: [] },
+        { id: 1002, brand: "Honda", year: 2018, transmission: "CVT", price: 335000000, currency: "THB", desc_lo: "ລົດຄອບຄົວຍອດນິຍົມ", desc_en: "Family SUV with full options", photos: [] },
+        { id: 1003, brand: "Mitsubishi", year: 2017, transmission: "Auto", price: 31800, currency: "USD", desc_lo: "ປະຫວັດການເຂົ້າສູນຄົບ", desc_en: "Service history available", photos: [] }
       ];
       refreshCarsUI();
     }
@@ -1334,14 +1317,10 @@
     }
 
     function readCarForm() {
-      const prev = editingId ? cars.find((x) => x.id === editingId) : null;
       return {
         brand: document.getElementById("carBrand").value.trim(),
-        model: prev && prev.model && String(prev.model).trim() ? String(prev.model).trim() : "-",
         year: Number(document.getElementById("carYear").value || 0),
-        mileage: prev ? Number(prev.mileage || 0) : 0,
         transmission: document.getElementById("carTransmission").value,
-        color: prev ? String(prev.color || "").trim() : "",
         price: parseNumericInput(document.getElementById("carPrice").value),
         currency: document.getElementById("carCurrency").value,
         desc_lo: document.getElementById("carDescLo").value.trim(),
@@ -1544,13 +1523,12 @@
           </div>
           ${cars.map((c) => {
         const thumb = c.photos && c.photos[0] ? c.photos[0] : PLACEHOLDER_PHOTO;
-        const aml = carModelLabel(c.model);
         const specLine = carSpecParts(c).map((p) => esc(p)).join(" · ");
         return `
           <div class="admin-list-item">
             <img src="${esc(thumb)}" alt="">
             <div class="admin-main">
-              <div class="admin-title">${esc(c.brand)}${aml ? " " + esc(aml) : ""}</div>
+              <div class="admin-title">${esc(c.brand)}</div>
               <div class="admin-sub">${specLine}</div>
               <div class="admin-sub">${Array.isArray(c.photos) ? c.photos.length : 0} photos</div>
             </div>
@@ -1606,10 +1584,7 @@
         const msg = document.getElementById("waMsg").value.trim();
         const target = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
         let carLine = "-";
-        if (car) {
-          const wm = carModelLabel(car.model);
-          carLine = `${car.brand}${wm ? " " + wm : ""} ${car.year}`.trim();
-        }
+        if (car) carLine = `${car.brand} ${car.year}`.trim();
         const text = encodeURIComponent(`Name: ${name}\nPhone: ${phone}\nCar: ${carLine}\nMessage: ${msg}`);
         window.open(`https://wa.me/${target}?text=${text}`, "_blank", "noopener,noreferrer");
       });

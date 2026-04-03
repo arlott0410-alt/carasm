@@ -2,11 +2,8 @@
 CREATE TABLE IF NOT EXISTS cars (
   id            BIGSERIAL PRIMARY KEY,
   brand         TEXT NOT NULL,
-  model         TEXT NOT NULL,
   year          INTEGER NOT NULL,
-  mileage       INTEGER DEFAULT 0,
   transmission  TEXT DEFAULT 'Auto',
-  color         TEXT,
   price         BIGINT NOT NULL,
   currency      TEXT DEFAULT 'LAK'
                 CHECK (currency IN ('LAK','THB','USD')),
