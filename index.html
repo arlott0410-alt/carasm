@@ -1581,6 +1581,9 @@
     }
     window.deleteCar = deleteCar;
 
+    let adminPage = 1;
+    const ADMIN_PAGE_SIZE = 10;
+
     function editCar(id) {
       const c = cars.find((x) => x.id === id);
       if (!c) return;
@@ -1601,6 +1604,13 @@
     window.editCar = editCar;
 
     function loadAdminList() {
+      const total = cars.length;
+      const totalPages = Math.max(1, Math.ceil(total / ADMIN_PAGE_SIZE));
+      if (adminPage > totalPages) adminPage = totalPages;
+      if (adminPage < 1) adminPage = 1;
+      const start = (adminPage - 1) * ADMIN_PAGE_SIZE;
+      const pageItems = cars.slice(start, start + ADMIN_PAGE_SIZE);
+
       const root = document.getElementById("adminList");
       root.innerHTML = `
         <div class="admin-list">
@@ -1610,7 +1620,7 @@
             <div style="text-align:right;">Price</div>
             <div style="text-align:right;">Actions</div>
           </div>
-          ${cars.map((c) => {
+          ${pageItems.map((c) => {
         const thumb = c.photos && c.photos[0] ? c.photos[0] : PLACEHOLDER_PHOTO;
         const specLine = carSpecParts(c).map((p) => esc(p)).join(" · ");
         return `
@@ -1629,9 +1639,25 @@
           </div>
         `;
       }).join("")}
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 4px 0;border-top:1px solid var(--border);margin-top:8px;font-size:12px;color:var(--muted);">
+            <div>
+              Page ${adminPage} / ${totalPages}
+              · Showing ${pageItems.length} of ${total} cars
+            </div>
+            <div style="display:flex;gap:6px;">
+              <button class="btn btn-ghost" type="button" ${adminPage <= 1 ? "disabled" : ""} onclick="changeAdminPage(-1)">Prev</button>
+              <button class="btn btn-ghost" type="button" ${adminPage >= totalPages ? "disabled" : ""} onclick="changeAdminPage(1)">Next</button>
+            </div>
+          </div>
         </div>
       `;
     }
+
+    function changeAdminPage(delta) {
+      adminPage += delta;
+      loadAdminList();
+    }
+    window.changeAdminPage = changeAdminPage;
 
     function setLang(l) {
       document.documentElement.lang = l === "en" ? "en" : "lo";
