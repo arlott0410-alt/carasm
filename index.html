@@ -144,55 +144,21 @@
     .hero-stats { margin-top: 24px; display: flex; gap: 22px; color: var(--muted); }
     .hero-stats strong { display: block; color: var(--text); font-size: 20px; margin-bottom: 3px; }
     .hero-panel {
-      background: linear-gradient(135deg, #1a1a1a, #111);
+      background: #050505;
       border: 1px solid var(--border);
       border-radius: 18px;
       min-height: 420px;
-      position: relative;
       overflow: hidden;
-    }
-    .hero-panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 26px 26px;
-      opacity: .35;
-    }
-    .ring {
-      width: 170px;
-      height: 170px;
-      border: 2px solid var(--gold);
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      display: grid;
-      place-items: center;
-      animation: spin 12s linear infinite;
-      font-size: 42px;
-      z-index: 2;
-    }
-    @keyframes spin { from { transform: translate(-50%, -50%) rotate(0); } to { transform: translate(-50%, -50%) rotate(360deg); } }
-    .float-badge {
-      position: absolute;
-      z-index: 2;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      background: rgba(10,10,10,.9);
-      padding: 10px 13px;
-      color: var(--muted);
-      font-size: 13px;
       display: flex;
-      align-items: center;
-      gap: 8px;
+      align-items: stretch;
+      justify-content: center;
     }
-    .dot { width: 9px; height: 9px; border-radius: 999px; }
-    .dot.green { background: var(--green); }
-    .dot.amber { background: var(--amber); }
-    .badge-a { top: 20px; right: 18px; }
-    .badge-b { left: 18px; bottom: 20px; }
+    .hero-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
     .ticker {
       background: var(--gold);
       color: #1b1606;
@@ -786,9 +752,7 @@
           </div>
         </div>
         <div class="hero-panel lux-border">
-          <div class="ring">🚗</div>
-          <div class="float-badge badge-a"><span class="dot green"></span><span data-lo>ພ້ອມນັດເບິ່ງລົດມື້ນີ້</span><span data-en>View today available</span></div>
-          <div class="float-badge badge-b"><span class="dot amber"></span><span data-lo>ຕອບ WA ໄວກວ່າ 1 ຊົ່ວໂມງ</span><span data-en>WA reply in under 1 hour</span></div>
+          <img id="heroImage" class="hero-image" src="/icons/logo.png" alt="ASM hero">
         </div>
       </div>
       <div class="ticker">
@@ -983,6 +947,7 @@
           <input id="s_facebook_url" placeholder="facebook_url">
           <input id="s_hours_lo" placeholder="hours_lo">
           <input id="s_hours_en" placeholder="hours_en">
+          <input id="s_hero_image_url" placeholder="hero_image_url (PNG/JPG URL)">
         </div>
         <div style="display:flex;justify-content:flex-end;margin-top:10px;">
           <button class="btn btn-gold" id="btnSaveSettings">Save Settings</button>
@@ -1024,7 +989,8 @@
       location_en: "Vientiane Capital, Laos",
       facebook_url: "",
       hours_lo: "ຈັນ-ອາທິດ 08:00-18:00",
-      hours_en: "Mon-Sun 08:00-18:00"
+      hours_en: "Mon-Sun 08:00-18:00",
+      hero_image_url: ""
     };
     let selectedFiles = [];
     let existingPhotos = [];
@@ -1328,6 +1294,8 @@
       });
       document.querySelectorAll("[data-dyn-text='wa-number']").forEach((el) => el.textContent = shopSettings.phone || "");
       document.querySelectorAll("[data-dyn-text='phone-number']").forEach((el) => el.textContent = shopSettings.phone || "");
+      const heroImg = document.getElementById("heroImage");
+      if (heroImg) heroImg.src = shopSettings.hero_image_url || "/icons/logo.png";
       loadSettingsForm();
     }
 
@@ -1337,7 +1305,7 @@
         return;
       }
       showToast("Saving...", "success");
-      const keys = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en"];
+      const keys = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en","hero_image_url"];
       const payload = keys.map((k) => ({ key: k, value: shopSettings[k] || "" }));
       const { error } = await supa.from("settings").upsert(payload, { onConflict: "key" });
       if (error) {
@@ -1348,7 +1316,7 @@
     }
 
     function loadSettingsForm() {
-      const ids = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en"];
+      const ids = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en","hero_image_url"];
       ids.forEach((k) => {
         const el = document.getElementById(`s_${k}`);
         if (el) el.value = shopSettings[k] || "";
@@ -1356,7 +1324,7 @@
     }
 
     function readSettingsForm() {
-      const ids = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en"];
+      const ids = ["shop_name","tagline_lo","tagline_en","wa_number","phone","location_lo","location_en","facebook_url","hours_lo","hours_en","hero_image_url"];
       ids.forEach((k) => {
         const el = document.getElementById(`s_${k}`);
         if (el) shopSettings[k] = el.value.trim();
