@@ -1033,20 +1033,27 @@
 
     const CARS_SELECT_FULL = "id,brand,model,year,mileage,transmission,color,price,currency,desc_lo,desc_en,photos,created_at,updated_at";
     const CARS_SELECT_LEGACY = "id,brand,model,year,mileage,transmission,color,price,desc_lo,desc_en,photos,created_at,updated_at";
+    const PLACEHOLDER_PHOTO = "/icons/no-photo.svg";
 
     function esc(str) {
       return String(str || "").replace(/[&<>"']/g, (s) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[s]));
     }
 
     function buildCard(car, lang) {
-      const photos = Array.isArray(car.photos) && car.photos.length ? car.photos : ["https://images.unsplash.com/photo-1549399542-7e3f8b79c341?auto=format&fit=crop&w=1000&q=60"];
+      const realPhotos = Array.isArray(car.photos) ? car.photos.filter(Boolean) : [];
+      const hasPhotos = realPhotos.length > 0;
+      const photos = hasPhotos ? realPhotos : [PLACEHOLDER_PHOTO];
       const desc = lang === "lo" ? (car.desc_lo || car.desc_en || "") : (car.desc_en || car.desc_lo || "");
+      const photoBadge = hasPhotos
+        ? `${realPhotos.length} <span data-lo>ຮູບ</span><span data-en>photos</span>`
+        : `<span data-lo>ບໍ່ມີຮູບ</span><span data-en>No photo</span>`;
+      const phAttr = hasPhotos ? "" : ' data-placeholder="1"';
       return `
         <article class="card" data-id="${car.id}">
           <div class="photo-wrap">
-            <img src="${esc(photos[0])}" alt="${esc(car.brand)} ${esc(car.model)}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0" onclick="openLightboxFromEl(this)">
+            <img src="${esc(photos[0])}" alt="${esc(car.brand)} ${esc(car.model)}" data-gallery='${esc(JSON.stringify(photos))}' data-idx="0" onclick="openLightboxFromEl(this)"${phAttr}>
             <div class="photo-overlay"></div>
-            <div class="count-badge">${photos.length} photos</div>
+            <div class="count-badge">${photoBadge}</div>
             <button class="gallery-nav left" onclick="slideGal(this,-1)" type="button">‹</button>
             <button class="gallery-nav right" onclick="slideGal(this,1)" type="button">›</button>
             <div class="dots">${photos.map((_, i) => `<button class="dot-mini ${i===0?"active":""}" data-dot="${i}" onclick="slideGal(this,0)" type="button"></button>`).join("")}</div>
@@ -1106,7 +1113,7 @@
       document.getElementById("lightbox").classList.add("show");
     }
     window.openLightboxFromEl = function openLightboxFromEl(imgEl) {
-      if (!imgEl) return;
+      if (!imgEl || imgEl.dataset.placeholder === "1") return;
       const photos = JSON.parse(imgEl.dataset.gallery || "[]");
       const idx = Number(imgEl.dataset.idx || 0);
       openLightbox(photos, idx);
@@ -1514,7 +1521,7 @@
             <div style="text-align:right;">Actions</div>
           </div>
           ${cars.map((c) => {
-        const thumb = c.photos && c.photos[0] ? c.photos[0] : "https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=700&q=60";
+        const thumb = c.photos && c.photos[0] ? c.photos[0] : PLACEHOLDER_PHOTO;
         return `
           <div class="admin-list-item">
             <img src="${esc(thumb)}" alt="">

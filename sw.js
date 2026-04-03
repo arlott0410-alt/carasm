@@ -1,9 +1,10 @@
-const CACHE_NAME = "asmcars-cache-v2";
+const CACHE_NAME = "asmcars-cache-v3";
 const APP_SHELL = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
   "/icons/logo.png",
+  "/icons/no-photo.svg",
   "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
 ];
 
