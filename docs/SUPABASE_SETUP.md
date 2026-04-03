@@ -9,6 +9,9 @@
 - Run all SQL from `supabase/schema.sql`.
 - Confirm tables `cars` and `settings` are created.
 
+### Existing database (upgrade)
+If your project was created earlier and cars “disappear” after saving, your table may be missing the `currency` column. Run `supabase/migration_add_currency.sql` once in the SQL Editor, then reload the site.
+
 ## 3) Configure storage
 - In `SQL Editor`, run `supabase/storage-policy.sql`.
 - Confirm bucket `car-images` exists and is public.

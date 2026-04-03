@@ -1014,6 +1014,26 @@
       return parseNumericInput(v).toLocaleString("en-US");
     }
 
+    function isMissingDbColumnError(err) {
+      if (!err) return false;
+      const m = String(err.message || "").toLowerCase();
+      return m.includes("currency") || m.includes("does not exist") || m.includes("schema cache") || err.code === "42703" || err.code === "PGRST204";
+    }
+
+    function withoutCurrency(obj) {
+      const o = { ...obj };
+      delete o.currency;
+      return o;
+    }
+
+    function normalizeCarRow(row) {
+      if (!row) return row;
+      return { ...row, currency: row.currency || "LAK" };
+    }
+
+    const CARS_SELECT_FULL = "id,brand,model,year,mileage,transmission,color,price,currency,desc_lo,desc_en,photos,created_at,updated_at";
+    const CARS_SELECT_LEGACY = "id,brand,model,year,mileage,transmission,color,price,desc_lo,desc_en,photos,created_at,updated_at";
+
     function esc(str) {
       return String(str || "").replace(/[&<>"']/g, (s) => ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[s]));
     }
@@ -1177,19 +1197,39 @@
       loadAdminList();
     }
 
+    function setInventoryBannerDemo() {
+      const w = document.getElementById("cfgWarn");
+      w.innerHTML = '<span data-lo>ຍັງບໍ່ໄດ້ຕັ້ງ Supabase — ສະແດງຂໍ້ມູນຕົວຢ່າງ</span><span data-en>Supabase not configured — showing demo cars only.</span>';
+      w.classList.add("show");
+    }
+
+    function setInventoryBannerError(msg) {
+      const w = document.getElementById("cfgWarn");
+      w.innerHTML = `<span data-lo>ໂຫຼດລາຍການລົດບໍ່ສຳເລັດ: ${esc(msg)} — ກວດ SQL ວ່າມີຄອລັມ currency ຫຼືບໍ່</span><span data-en>Could not load cars: ${esc(msg)} — run supabase/migration_add_currency.sql if needed.</span>`;
+      w.classList.add("show");
+    }
+
     async function fetchCars() {
       if (!supa) return renderDemoCards();
-      const { data, error } = await supa
-        .from("cars")
-        .select("id,brand,model,year,mileage,transmission,color,price,currency,desc_lo,desc_en,photos,created_at,updated_at")
-        .order("created_at", { ascending: false });
-      if (error) return renderDemoCards();
-      cars = data || [];
+      let { data, error } = await supa.from("cars").select(CARS_SELECT_FULL).order("created_at", { ascending: false });
+      if (error && isMissingDbColumnError(error)) {
+        const r = await supa.from("cars").select(CARS_SELECT_LEGACY).order("created_at", { ascending: false });
+        data = r.data;
+        error = r.error;
+      }
+      if (error) {
+        setInventoryBannerError(error.message || "Unknown error");
+        cars = [];
+        refreshCarsUI();
+        return;
+      }
+      document.getElementById("cfgWarn").classList.remove("show");
+      cars = (data || []).map(normalizeCarRow);
       refreshCarsUI();
     }
 
     function renderDemoCards() {
-      document.getElementById("cfgWarn").classList.add("show");
+      setInventoryBannerDemo();
       cars = [
         { id: 1001, brand: "Toyota", model: "Hilux Revo", year: 2019, mileage: 74000, transmission: "Auto", color: "White", price: 389000000, currency: "LAK", desc_lo: "ເຄື່ອງດີ ພ້ອມໃຊ້ງານ", desc_en: "Reliable pickup, clean interior", photos: [] },
         { id: 1002, brand: "Honda", model: "CR-V", year: 2018, mileage: 82000, transmission: "CVT", color: "Black", price: 335000000, currency: "THB", desc_lo: "ລົດຄອບຄົວຍອດນິຍົມ", desc_en: "Family SUV with full options", photos: [] },
@@ -1384,19 +1424,28 @@
       let carId = editingId;
       let savedRow = null;
       if (!editingId) {
-        const { data, error } = await supa.from("cars").insert(payload).select("id").single();
-        if (error) return alert(error.message);
-        carId = data.id;
-        savedRow = { ...payload, id: carId, photos: [], created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
+        let ins = await supa.from("cars").insert(payload).select("id").single();
+        if (ins.error && isMissingDbColumnError(ins.error)) {
+          ins = await supa.from("cars").insert(withoutCurrency(payload)).select("id").single();
+        }
+        if (ins.error) return alert(ins.error.message);
+        carId = ins.data.id;
+        savedRow = {
+          ...payload,
+          id: carId,
+          photos: [],
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        };
       } else {
-        const { data, error } = await supa
-          .from("cars")
-          .update(payload)
-          .eq("id", editingId)
-          .select("id,brand,model,year,mileage,transmission,color,price,currency,desc_lo,desc_en,photos,created_at,updated_at")
-          .single();
-        if (error) return alert(error.message);
-        savedRow = data;
+        let up = await supa.from("cars").update(payload).eq("id", editingId).select(CARS_SELECT_FULL);
+        if (up.error && isMissingDbColumnError(up.error)) {
+          up = await supa.from("cars").update(withoutCurrency(payload)).eq("id", editingId).select(CARS_SELECT_LEGACY);
+        }
+        if (up.error) return alert(up.error.message);
+        const row = up.data && up.data[0];
+        const prev = cars.find((c) => c.id === editingId);
+        savedRow = row ? normalizeCarRow(row) : normalizeCarRow({ ...(prev || {}), ...payload, id: editingId });
       }
       let finalPhotos = (savedRow && Array.isArray(savedRow.photos)) ? savedRow.photos : [];
       if (selectedFiles.length) {
