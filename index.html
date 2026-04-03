@@ -1114,7 +1114,13 @@
 
     function buildWaHref(car) {
       const num = (shopSettings.wa_number || "85695043892").replace(/[^\d]/g, "");
-      const text = encodeURIComponent(`ສະບາຍດີ, ສົນໃຈລົດ ${car.brand} ${car.year} (${formatPrice(car.price, car.currency || "LAK")})`);
+      const price = formatPrice(car.price, car.currency || "LAK");
+      const photos = Array.isArray(car.photos) ? car.photos.filter(Boolean) : [];
+      const photoLines = photos.slice(0, 3).map((url, idx) => `Photo ${idx + 1}: ${url}`).join("\n");
+      const text = encodeURIComponent(
+        `ສະບາຍດີ, ສົນໃຈລົດ ${car.brand} ${car.year} (${price})` +
+        (photoLines ? `\n${photoLines}` : "")
+      );
       return `https://wa.me/${num}?text=${text}`;
     }
 
